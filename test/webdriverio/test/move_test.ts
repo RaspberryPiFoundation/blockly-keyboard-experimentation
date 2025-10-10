@@ -537,9 +537,549 @@ suite(`Value expression move tests`, function () {
   }
 });
 
+suite(`Statement expression unconstrained move tests`, function () {
+  // Increase timeout to 10s for this longer test (but disable
+  // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
+  this.timeout(PAUSE_TIME ? 0 : 10000);
+
+  /** Serialized simple statement block with no statement inputs. */
+  const STATEMENT_SIMPLE = {
+    type: 'draw_emoji',
+    id: 'simple_mover',
+    fields: {emoji: '✨'},
+  };
+
+  /** Serialized statement block with multiple statement inputs. */
+  const STATEMENT_COMPLEX = {
+    type: 'controls_if',
+    id: 'complex_mover',
+    extraState: {hasElse: true},
+  };
+
+  /**
+   * Expected connection candidates when moving STATEMENT_SIMPLE, after
+   * pressing ArrowDown n times.
+   */
+  const EXPECTED_STATEMENT_SIMPLE_DOWN = [
+    null,
+    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
+    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
+    null,
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    null,
+    null,
+    null,
+    {id: 'controls_repeat_ext', index: 1, ownIndex: 0}, // Below repeat block
+    {id: 'controls_repeat_ext', index: 1, ownIndex: 0}, // Below repeat block
+    null,
+    {id: 'controls_if', index: 6, ownIndex: 0}, // In else condition
+    {id: 'controls_if', index: 6, ownIndex: 0}, // In else condition
+    null,
+  ];
+
+  /**
+   * Expected connection candidates when moving STATEMENT_SIMPLE, after
+   * pressing ArrowUp n times.
+   */
+  const EXPECTED_STATEMENT_SIMPLE_UP = [
+    null,
+    {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
+    {id: 'controls_if', index: 6, ownIndex: 0}, // In else condition
+    {id: 'controls_if', index: 6, ownIndex: 0}, // In else condition
+    {id: 'controls_if', index: 5, ownIndex: 0}, // In do condition
+    {id: 'controls_if', index: 5, ownIndex: 0}, // In do condition
+    {id: 'controls_repeat_ext', index: 1, ownIndex: 0}, // Below repeat block
+    null,
+    null,
+    {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
+    {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    null,
+    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
+    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
+    null,
+  ];
+
+  /**
+   * Expected connection candidates when moving STATEMENT_SIMPLE, after
+   * pressing ArrowLeft n times.
+   */
+  const EXPECTED_STATEMENT_SIMPLE_LEFT = [
+    null,
+    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
+    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
+    null,
+    null,
+    null,
+    null,
+  ];
+
+  /**
+   * Expected connection candidates when moving STATEMENT_SIMPLE, after
+   * pressing ArrowRight n times.
+   */
+  const EXPECTED_STATEMENT_SIMPLE_RIGHT = EXPECTED_STATEMENT_SIMPLE_LEFT.concat().reverse();
+
+  /**
+   * Expected connection candidates when moving STATEMENT_COMPLEX, after
+   * pressing ArrowDown n times.
+   */
+  const EXPECTED_STATEMENT_COMPLEX_DOWN = [
+    null,
+    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
+    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
+    {id: 'text_print', index: 0, ownIndex: 4}, // As parent of print block
+    null,
+    {id: 'text_print', index: 0, ownIndex: 3}, // As parent of print block
+    null,
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
+    {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
+    null,
+  ];
+
+  /**
+   * Expected connection candidates when moving STATEMENT_COMPLEX, after
+   * pressing ArrowUp n times.
+   */
+  const EXPECTED_STATEMENT_COMPLEX_UP = [
+    null,
+    {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
+    {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    null,
+    {id: 'text_print', index: 0, ownIndex: 3}, // As parent of print block
+    null,
+    {id: 'text_print', index: 0, ownIndex: 4}, // As parent of print block
+    {id: 'text_print', index: 0, ownIndex: 4}, // As parent of print block
+    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
+    null,
+  ];
+
+  /**
+   * Expected connection candidates when moving STATEMENT_COMPLEX, after
+   * pressing ArrowLeft n times.
+   */
+  const EXPECTED_STATEMENT_COMPLEX_LEFT = [
+    null,
+    {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
+    {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    null,
+  ];
+
+  /**
+   * Expected connection candidates when moving STATEMENT_COMPLEX, after
+   * pressing ArrowRight n times.
+   */
+  const EXPECTED_STATEMENT_COMPLEX_RIGHT = [
+    null,
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
+    null,
+    {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
+    null,
+  ];
+
+  for (const renderer of ['geras', 'thrasos', 'zelos']) {
+    // TODO(#707): These tests fail when run using zelos, so for now
+    // we skip entire suite.  Stop skipping suite when bug is fixed.
+    const suiteOrSkip = renderer === 'zelos' ? suite.skip : suite;
+    suiteOrSkip(`using ${renderer}`, function () {
+      // Clear the workspace and load start blocks.
+      setup(async function () {
+        this.browser = await testSetup(
+          createTestUrl(
+            new URLSearchParams({renderer, scenario: 'moveStatementTestBlocks'}),
+          ),
+          this.timeout(),
+        );
+        await this.browser.pause(PAUSE_TIME);
+      });
+
+      suite('Unconstrained moves of a simple statement block', function () {
+        setup(async function () {
+          await appendBlock(this.browser, STATEMENT_SIMPLE);
+        });
+
+        test('moving down', async function () {
+          await moveBlock(
+            this.browser,
+            STATEMENT_SIMPLE.id,
+            (await getCoordinate(this.browser, 'text_print')).x + 25,
+            (await getCoordinate(this.browser, 'text_print')).y - 60,
+          );
+          await moveBlockAndAssertCandidates(
+            STATEMENT_SIMPLE.id,
+            [Key.Alt, Key.ArrowDown],
+            EXPECTED_STATEMENT_SIMPLE_DOWN,
+            this.browser,
+          );
+        });
+
+        test('moving up', async function () {
+          await moveBlock(
+            this.browser,
+            STATEMENT_SIMPLE.id,
+            (await getCoordinate(this.browser, 'text_print')).x + 25,
+            (await getCoordinate(this.browser, 'text_print')).y + 240,
+          );
+          await moveBlockAndAssertCandidates(
+            STATEMENT_SIMPLE.id,
+            [Key.Alt, Key.ArrowUp],
+            EXPECTED_STATEMENT_SIMPLE_UP,
+            this.browser,
+          );
+        });
+
+        test('moving left', async function () {
+          await moveBlock(
+            this.browser,
+            STATEMENT_SIMPLE.id,
+            (await getCoordinate(this.browser, 'text_print')).x + 30,
+            (await getCoordinate(this.browser, 'text_print')).y - 10,
+          );
+          await moveBlockAndAssertCandidates(
+            STATEMENT_SIMPLE.id,
+            [Key.Alt, Key.ArrowLeft],
+            EXPECTED_STATEMENT_SIMPLE_LEFT,
+            this.browser,
+          );
+        });
+
+        test('moving right', async function () {
+          await moveBlock(
+            this.browser,
+            STATEMENT_SIMPLE.id,
+            (await getCoordinate(this.browser, 'text_print')).x - 90,
+            (await getCoordinate(this.browser, 'text_print')).y - 10,
+          );
+          await moveBlockAndAssertCandidates(
+            STATEMENT_SIMPLE.id,
+            [Key.Alt, Key.ArrowRight],
+            EXPECTED_STATEMENT_SIMPLE_RIGHT,
+            this.browser,
+          );
+        });
+      });
+
+      suite('Unconstrained moves of a complex statement block', function () {
+        setup(async function () {
+          await appendBlock(this.browser, STATEMENT_COMPLEX);
+        });
+
+        test('moving down', async function () {
+          await moveBlock(
+            this.browser,
+            STATEMENT_COMPLEX.id,
+            (await getCoordinate(this.browser, 'text_print')).x - 22,
+            (await getCoordinate(this.browser, 'text_print')).y - 120,
+          );
+          await moveBlockAndAssertCandidates(
+            STATEMENT_COMPLEX.id,
+            [Key.Alt, Key.ArrowDown],
+            EXPECTED_STATEMENT_COMPLEX_DOWN,
+            this.browser,
+          );
+        });
+
+        test('moving up', async function () {
+          await moveBlock(
+            this.browser,
+            STATEMENT_COMPLEX.id,
+            (await getCoordinate(this.browser, 'text_print')).x - 22,
+            (await getCoordinate(this.browser, 'text_print')).y + 260,
+          );
+          await moveBlockAndAssertCandidates(
+            STATEMENT_COMPLEX.id,
+            [Key.Alt, Key.ArrowUp],
+            EXPECTED_STATEMENT_COMPLEX_UP,
+            this.browser,
+          );
+        });
+
+        test('moving left', async function () {
+          await moveBlock(
+            this.browser,
+            STATEMENT_COMPLEX.id,
+            (await getCoordinate(this.browser, 'text_print')).x + 80,
+            (await getCoordinate(this.browser, 'text_print')).y + 35,
+          );
+          await moveBlockAndAssertCandidates(
+            STATEMENT_COMPLEX.id,
+            [Key.Alt, Key.ArrowLeft],
+            EXPECTED_STATEMENT_COMPLEX_LEFT,
+            this.browser,
+          );
+        });
+
+        test('moving right', async function () {
+          await moveBlock(
+            this.browser,
+            STATEMENT_COMPLEX.id,
+            (await getCoordinate(this.browser, 'text_print')).x - 35,
+            (await getCoordinate(this.browser, 'text_print')).y + 35,
+          );
+          await moveBlockAndAssertCandidates(
+            STATEMENT_COMPLEX.id,
+            [Key.Alt, Key.ArrowRight],
+            EXPECTED_STATEMENT_COMPLEX_RIGHT,
+            this.browser,
+          );
+        });
+      });
+    });
+  }
+});
+
+suite(`Value expression unconstrained move tests`, function () {
+  // Increase timeout to 10s for this longer test (but disable
+  // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
+  this.timeout(PAUSE_TIME ? 0 : 10000);
+
+  /** Serialized simple reporter value block with no inputs. */
+  const VALUE_SIMPLE = {
+    type: 'text',
+    id: 'simple_mover',
+    fields: {TEXT: 'simple mover'},
+  };
+
+  /** Serialized value block with a single free (external) input. */
+  const VALUE_UNARY = {
+    type: 'text_changeCase',
+    id: 'unary_mover',
+    fields: {CASE: 'TITLECASE'},
+  };
+
+  /**
+   * Expected connection candidates when moving VALUE_SIMPLE, after
+   * pressing ArrowDown n times.
+   */
+  const EXPECTED_VALUE_DOWN = [
+    null,
+    {id: 'print1', index: 2, ownIndex: 0}, // Print block with no shadow.
+    {id: 'print1', index: 2, ownIndex: 0}, // Print block with no shadow.
+    {id: 'print2', index: 2, ownIndex: 0}, // Print block with shadow.
+    {id: 'print2', index: 2, ownIndex: 0}, // Print block with shadow.
+    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
+    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
+    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
+    null,
+  ];
+
+  /**
+   * Expected connection candidates when moving VALUE_SIMPLE, after
+   * pressing ArrowUp n times.
+   */
+  const EXPECTED_VALUE_UP = EXPECTED_VALUE_DOWN.concat().reverse();
+
+  /**
+   * Expected connection candidates when moving VALUE_SIMPLE, after
+   * pressing ArrowLeft n times.
+   */
+  const EXPECTED_VALUE_LEFT = [
+    null,
+    {id: 'join1', index: 2, ownIndex: 0}, // Join second input
+    {id: 'join1', index: 2, ownIndex: 0}, // Join second input
+    {id: 'join1', index: 2, ownIndex: 0}, // Join second input
+    null,
+    null,
+    null,
+    {id: 'join1', index: 1, ownIndex: 0}, // Join first input
+    {id: 'join1', index: 1, ownIndex: 0}, // Join first input
+    null,
+    null,
+    null,
+    null,
+    null,
+    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
+    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
+    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
+    null,
+  ];
+
+  /**
+   * Expected connection candidates when moving VALUE_SIMPLE, after
+   * pressing ArrowRight n times.
+   */
+  const EXPECTED_VALUE_RIGHT = EXPECTED_VALUE_LEFT.concat().reverse();
+
+  for (const renderer of ['geras', 'thrasos', 'zelos']) {
+    // TODO(#707): These tests fail when run using zelos, so for now
+    // we skip entire suite.  Stop skipping suite when bug is fixed.
+    const suiteOrSkip = renderer === 'zelos' ? suite.skip : suite;
+    suiteOrSkip(`using ${renderer}`, function () {
+      // Clear the workspace and load start blocks.
+      setup(async function () {
+        this.browser = await testSetup(
+          createTestUrl(
+            new URLSearchParams({renderer, scenario: 'moveValueTestBlocks'}),
+          ),
+          this.timeout(),
+        );
+        await this.browser.pause(PAUSE_TIME);
+      });
+
+      suite('Unconstrained moves of a simple reporter block', function () {
+        setup(async function () {
+          await appendBlock(this.browser, VALUE_SIMPLE);
+        });
+
+        test('moving down', async function () {
+          await moveBlock(
+            this.browser,
+            VALUE_SIMPLE.id,
+            (await getInputCoordinates(this.browser, 'print1', 'TEXT')).x,
+            (await getCoordinate(this.browser, 'join0')).y + 80,
+          );
+          await moveBlockAndAssertCandidates(
+            VALUE_SIMPLE.id,
+            [Key.Alt, Key.ArrowDown],
+            EXPECTED_VALUE_DOWN,
+            this.browser,
+          );
+        });
+
+        test('moving up', async function () {
+          await moveBlock(
+            this.browser,
+            VALUE_SIMPLE.id,
+            (await getInputCoordinates(this.browser, 'print1', 'TEXT')).x,
+            (await getCoordinate(this.browser, 'join0')).y + 235,
+          );
+          await moveBlockAndAssertCandidates(
+            VALUE_SIMPLE.id,
+            [Key.Alt, Key.ArrowUp],
+            EXPECTED_VALUE_UP,
+            this.browser,
+          );
+        });
+
+        test('moving left', async function () {
+          await moveBlock(
+            this.browser,
+            VALUE_SIMPLE.id,
+            (await getInputCoordinates(this.browser, 'join1', 'ADD1')).x + 30,
+            (await getCoordinate(this.browser, 'join1')).y,
+          );
+          await moveBlockAndAssertCandidates(
+            VALUE_SIMPLE.id,
+            [Key.Alt, Key.ArrowLeft],
+            EXPECTED_VALUE_LEFT,
+            this.browser,
+          );
+        });
+
+        test('moving right', async function () {
+          await moveBlock(
+            this.browser,
+            VALUE_SIMPLE.id,
+            (await getInputCoordinates(this.browser, 'join1', 'ADD1')).x - 310,
+            (await getCoordinate(this.browser, 'join1')).y,
+          );
+          await moveBlockAndAssertCandidates(
+            VALUE_SIMPLE.id,
+            [Key.Alt, Key.ArrowRight],
+            EXPECTED_VALUE_RIGHT,
+            this.browser,
+          );
+        });
+      });
+
+      suite('Unconstrained moves of a unary value block', function () {
+        setup(async function () {
+          await appendBlock(this.browser, VALUE_UNARY);
+        });
+
+        test('moving down', async function () {
+          await moveBlock(
+            this.browser,
+            VALUE_UNARY.id,
+            (await getInputCoordinates(this.browser, 'print1', 'TEXT')).x,
+            (await getCoordinate(this.browser, 'join0')).y + 80,
+          );
+          await moveBlockAndAssertCandidates(
+            VALUE_UNARY.id,
+            [Key.Alt, Key.ArrowDown],
+            EXPECTED_VALUE_DOWN,
+            this.browser,
+          );
+        });
+
+        test('moving up', async function () {
+          await moveBlock(
+            this.browser,
+            VALUE_UNARY.id,
+            (await getInputCoordinates(this.browser, 'print1', 'TEXT')).x,
+            (await getCoordinate(this.browser, 'join0')).y + 235,
+          );
+          await moveBlockAndAssertCandidates(
+            VALUE_UNARY.id,
+            [Key.Alt, Key.ArrowUp],
+            EXPECTED_VALUE_UP,
+            this.browser,
+          );
+        });
+
+        test('moving left', async function () {
+          await moveBlock(
+            this.browser,
+            VALUE_UNARY.id,
+            (await getInputCoordinates(this.browser, 'join1', 'ADD1')).x + 30,
+            (await getCoordinate(this.browser, 'join1')).y,
+          );
+          await moveBlockAndAssertCandidates(
+            VALUE_UNARY.id,
+            [Key.Alt, Key.ArrowLeft],
+            EXPECTED_VALUE_LEFT,
+            this.browser,
+          );
+        });
+
+        test('moving right', async function () {
+          await moveBlock(
+            this.browser,
+            VALUE_UNARY.id,
+            (await getInputCoordinates(this.browser, 'join1', 'ADD1')).x - 310,
+            (await getCoordinate(this.browser, 'join1')).y,
+          );
+          await moveBlockAndAssertCandidates(
+            VALUE_UNARY.id,
+            [Key.Alt, Key.ArrowRight],
+            EXPECTED_VALUE_RIGHT,
+            this.browser,
+          );
+        });
+      });
+    });
+  }
+});
+
 /**
  * Create a mocha test function moving a specified block in a
- * particular direction, checking that it has the the expected
+ * particular direction, checking that it has the expected
  * connection candidate after each step, and that once the move
  * finishes that the moving block is reconnected to its initial
  * location.
@@ -552,25 +1092,34 @@ suite(`Value expression move tests`, function () {
 function moveTest(
   mover: string,
   key: string | string[],
-  candidates: Array<{id: string; index: number}>,
+  candidates: Array<{id: string; index: number} | null>,
 ) {
   return async function (this: Mocha.Context) {
-    // Navigate to block to be moved and intiate move.
-    await focusOnBlock(this.browser, mover);
-    const initialInfo = await getFocusedNeighbourInfo(this.browser);
-    await sendKeyAndWait(this.browser, 'm');
-    // Press specified key multiple times, checking connection candidates.
-    for (let i = 0; i < candidates.length; i++) {
-      const candidate = await getConnectionCandidate(this.browser);
-      chai.assert.deepEqual(candidate, candidates[i]);
-      await sendKeyAndWait(this.browser, key);
-    }
-
-    // Finish move and check final location of moved block.
-    await sendKeyAndWait(this.browser, Key.Enter);
-    const finalInfo = await getFocusedNeighbourInfo(this.browser);
-    chai.assert.deepEqual(initialInfo, finalInfo);
+    await moveBlockAndAssertCandidates(mover, key, candidates, this.browser);
   };
+}
+
+async function moveBlockAndAssertCandidates(
+  mover: string,
+  key: string | string[],
+  candidates: Array<{id: string; index: number} | null>,
+  browser: Browser,
+) {
+  // Navigate to block to be moved and intiate move.
+  await focusOnBlock(browser, mover);
+  const initialInfo = await getFocusedNeighbourInfo(browser);
+  await sendKeyAndWait(browser, 'm');
+  // Press specified key multiple times, checking connection candidates.
+  for (let i = 0; i < candidates.length; i++) {
+    const candidate = await getConnectionCandidate(browser);
+    chai.assert.deepEqual(candidate, candidates[i], `At candidate index ${i}`);
+    await sendKeyAndWait(browser, key);
+  }
+
+  // Finish move and check final location of moved block.
+  await sendKeyAndWait(browser, Key.Enter);
+  const finalInfo = await getFocusedNeighbourInfo(browser);
+  chai.assert.deepEqual(initialInfo, finalInfo);
 }
 
 /**
@@ -656,7 +1205,7 @@ function getConnectedBlockInfo(browser: Browser, id: string, index: number) {
  * getRelativeTosSurfaceXY().
  *
  * @param browser The webdriverio browser session.
- * @param id The ID of the block having the connection we wish to examine.
+ * @param id The ID of the block we wish to examine.
  * @returns The coordinates of the block.
  */
 function getCoordinate(
@@ -668,6 +1217,60 @@ function getCoordinate(
     if (!block) throw new Error('block not found');
     return block.getRelativeToSurfaceXY();
   }, id);
+}
+
+/**
+ * Given a block ID and input name, get the coordinates of that block's input.
+ *
+ * @param browser The webdriverio browser session.
+ * @param id The ID of the block we wish to examine.
+ * @param inputName The name of the input to examine.
+ * @returns The coordinates of the input.
+ */
+function getInputCoordinates(
+  browser: Browser,
+  id: string,
+  inputName: string,
+): Promise<Blockly.utils.Coordinate> {
+  return browser.execute(
+    (id: string, inputName: string) => {
+      const block = Blockly.getMainWorkspace().getBlockById(id);
+      if (!block) throw new Error('block not found');
+      const blockCoords = block.getRelativeToSurfaceXY();
+      const connection = block.getInput(inputName)!.connection!;
+      // return new Blockly.utils.Coordinate(blockCoords.x + connection.x, blockCoords.y + connection.y);
+      return new Blockly.utils.Coordinate(connection.x, connection.y);
+    },
+    id,
+    inputName,
+  );
+}
+
+/**
+ * Move a block with the given a block ID to the given workspace coordinates.
+ *
+ * @param browser The webdriverio browser session.
+ * @param id The ID of the block to move.
+ * @param x The destination x coordinate.
+ * @param y The destination y coordinate.
+ */
+function moveBlock(
+  browser: Browser,
+  id: string,
+  x: number,
+  y: number,
+): Promise<void> {
+  return browser.execute(
+    (id: string, x: number, y: number) => {
+      const block = Blockly.getMainWorkspace().getBlockById(id);
+      if (!block) throw new Error('block not found');
+      const currentCoords = block.getRelativeToSurfaceXY();
+      block.moveBy(x - currentCoords.x, y - currentCoords.y);
+    },
+    id,
+    x,
+    y,
+  );
 }
 
 /**
