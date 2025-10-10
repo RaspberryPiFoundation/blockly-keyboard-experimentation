@@ -619,7 +619,8 @@ suite(`Statement expression unconstrained move tests`, function () {
    * Expected connection candidates when moving STATEMENT_SIMPLE, after
    * pressing ArrowRight n times.
    */
-  const EXPECTED_STATEMENT_SIMPLE_RIGHT = EXPECTED_STATEMENT_SIMPLE_LEFT.concat().reverse();
+  const EXPECTED_STATEMENT_SIMPLE_RIGHT =
+    EXPECTED_STATEMENT_SIMPLE_LEFT.concat().reverse();
 
   /**
    * Expected connection candidates when moving STATEMENT_COMPLEX, after
@@ -712,7 +713,10 @@ suite(`Statement expression unconstrained move tests`, function () {
       setup(async function () {
         this.browser = await testSetup(
           createTestUrl(
-            new URLSearchParams({renderer, scenario: 'moveStatementTestBlocks'}),
+            new URLSearchParams({
+              renderer,
+              scenario: 'moveStatementTestBlocks',
+            }),
           ),
           this.timeout(),
         );
@@ -1236,9 +1240,10 @@ function getInputCoordinates(
     (id: string, inputName: string) => {
       const block = Blockly.getMainWorkspace().getBlockById(id);
       if (!block) throw new Error('block not found');
-      const blockCoords = block.getRelativeToSurfaceXY();
-      const connection = block.getInput(inputName)!.connection!;
-      // return new Blockly.utils.Coordinate(blockCoords.x + connection.x, blockCoords.y + connection.y);
+      const input = block.getInput(inputName);
+      if (!input) throw new Error('input not found');
+      const connection = input.connection;
+      if (!connection) throw new Error('connection not found');
       return new Blockly.utils.Coordinate(connection.x, connection.y);
     },
     id,
