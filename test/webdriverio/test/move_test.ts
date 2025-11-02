@@ -733,7 +733,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             this.browser,
             STATEMENT_COMPLEX.id,
             (await getCoordinate(this.browser, 'text_print')).x - 22,
-            (await getCoordinate(this.browser, 'text_print')).y - 120,
+            (await getCoordinate(this.browser, 'text_print')).y - 125,
           );
           await moveBlockAndAssertCandidateOrder(
             STATEMENT_COMPLEX.id,
@@ -748,7 +748,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             this.browser,
             STATEMENT_COMPLEX.id,
             (await getCoordinate(this.browser, 'text_print')).x - 22,
-            (await getCoordinate(this.browser, 'text_print')).y + 260,
+            (await getCoordinate(this.browser, 'text_print')).y + 254,
           );
           await moveBlockAndAssertCandidateOrder(
             STATEMENT_COMPLEX.id,
