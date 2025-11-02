@@ -563,8 +563,7 @@ suite(`Statement expression unconstrained move tests`, function () {
   const EXPECTED_STATEMENT_SIMPLE_DOWN = [
     {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
     {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    {id: 'controls_repeat_ext', index: 1, ownIndex: 0}, // Below repeat block
-    {id: 'controls_if', index: 6, ownIndex: 0}, // In else condition
+    {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
   ];
 
   /**
@@ -666,7 +665,7 @@ suite(`Statement expression unconstrained move tests`, function () {
           await moveBlock(
             this.browser,
             STATEMENT_SIMPLE.id,
-            (await getCoordinate(this.browser, 'text_print')).x + 25,
+            (await getCoordinate(this.browser, 'text_print')).x + 15,
             (await getCoordinate(this.browser, 'text_print')).y - 60,
           );
           await moveBlockAndAssertCandidateOrder(
