@@ -561,21 +561,10 @@ suite(`Statement expression unconstrained move tests`, function () {
    * pressing ArrowDown n times.
    */
   const EXPECTED_STATEMENT_SIMPLE_DOWN = [
-    null,
     {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
-    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
-    null,
     {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    null,
-    null,
-    null,
     {id: 'controls_repeat_ext', index: 1, ownIndex: 0}, // Below repeat block
-    {id: 'controls_repeat_ext', index: 1, ownIndex: 0}, // Below repeat block
-    null,
     {id: 'controls_if', index: 6, ownIndex: 0}, // In else condition
-    {id: 'controls_if', index: 6, ownIndex: 0}, // In else condition
-    null,
   ];
 
   /**
@@ -583,22 +572,13 @@ suite(`Statement expression unconstrained move tests`, function () {
    * pressing ArrowUp n times.
    */
   const EXPECTED_STATEMENT_SIMPLE_UP = [
-    null,
     {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
     {id: 'controls_if', index: 6, ownIndex: 0}, // In else condition
-    {id: 'controls_if', index: 6, ownIndex: 0}, // In else condition
-    {id: 'controls_if', index: 5, ownIndex: 0}, // In do condition
     {id: 'controls_if', index: 5, ownIndex: 0}, // In do condition
     {id: 'controls_repeat_ext', index: 1, ownIndex: 0}, // Below repeat block
-    null,
-    null,
-    {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
     {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
     {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    null,
     {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
-    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
-    null,
   ];
 
   /**
@@ -606,13 +586,7 @@ suite(`Statement expression unconstrained move tests`, function () {
    * pressing ArrowLeft n times.
    */
   const EXPECTED_STATEMENT_SIMPLE_LEFT = [
-    null,
     {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
-    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
-    null,
-    null,
-    null,
-    null,
   ];
 
   /**
@@ -627,26 +601,11 @@ suite(`Statement expression unconstrained move tests`, function () {
    * pressing ArrowDown n times.
    */
   const EXPECTED_STATEMENT_COMPLEX_DOWN = [
-    null,
-    {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
     {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
     {id: 'text_print', index: 0, ownIndex: 4}, // As parent of print block
-    null,
     {id: 'text_print', index: 0, ownIndex: 3}, // As parent of print block
-    null,
     {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
     {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
-    {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
-    null,
   ];
 
   /**
@@ -654,26 +613,11 @@ suite(`Statement expression unconstrained move tests`, function () {
    * pressing ArrowUp n times.
    */
   const EXPECTED_STATEMENT_COMPLEX_UP = [
-    null,
     {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
-    {id: 'controls_if', index: 1, ownIndex: 0}, // Below if-else block
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
     {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    null,
     {id: 'text_print', index: 0, ownIndex: 3}, // As parent of print block
-    null,
-    {id: 'text_print', index: 0, ownIndex: 4}, // As parent of print block
     {id: 'text_print', index: 0, ownIndex: 4}, // As parent of print block
     {id: 'text_print', index: 0, ownIndex: 1}, // Above print block
-    null,
   ];
 
   /**
@@ -681,13 +625,8 @@ suite(`Statement expression unconstrained move tests`, function () {
    * pressing ArrowLeft n times.
    */
   const EXPECTED_STATEMENT_COMPLEX_LEFT = [
-    null,
-    {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
     {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
     {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    null,
   ];
 
   /**
@@ -695,13 +634,8 @@ suite(`Statement expression unconstrained move tests`, function () {
    * pressing ArrowRight n times.
    */
   const EXPECTED_STATEMENT_COMPLEX_RIGHT = [
-    null,
     {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    {id: 'text_print', index: 1, ownIndex: 0}, // Below print block
-    null,
     {id: 'controls_if', index: 3, ownIndex: 0}, // Above repeat block
-    null,
   ];
 
   for (const renderer of ['geras', 'thrasos', 'zelos']) {
@@ -735,7 +669,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             (await getCoordinate(this.browser, 'text_print')).x + 25,
             (await getCoordinate(this.browser, 'text_print')).y - 60,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             STATEMENT_SIMPLE.id,
             [Key.Alt, Key.ArrowDown],
             EXPECTED_STATEMENT_SIMPLE_DOWN,
@@ -750,7 +684,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             (await getCoordinate(this.browser, 'text_print')).x + 25,
             (await getCoordinate(this.browser, 'text_print')).y + 240,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             STATEMENT_SIMPLE.id,
             [Key.Alt, Key.ArrowUp],
             EXPECTED_STATEMENT_SIMPLE_UP,
@@ -765,7 +699,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             (await getCoordinate(this.browser, 'text_print')).x + 30,
             (await getCoordinate(this.browser, 'text_print')).y - 10,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             STATEMENT_SIMPLE.id,
             [Key.Alt, Key.ArrowLeft],
             EXPECTED_STATEMENT_SIMPLE_LEFT,
@@ -780,7 +714,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             (await getCoordinate(this.browser, 'text_print')).x - 90,
             (await getCoordinate(this.browser, 'text_print')).y - 10,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             STATEMENT_SIMPLE.id,
             [Key.Alt, Key.ArrowRight],
             EXPECTED_STATEMENT_SIMPLE_RIGHT,
@@ -801,7 +735,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             (await getCoordinate(this.browser, 'text_print')).x - 22,
             (await getCoordinate(this.browser, 'text_print')).y - 120,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             STATEMENT_COMPLEX.id,
             [Key.Alt, Key.ArrowDown],
             EXPECTED_STATEMENT_COMPLEX_DOWN,
@@ -816,7 +750,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             (await getCoordinate(this.browser, 'text_print')).x - 22,
             (await getCoordinate(this.browser, 'text_print')).y + 260,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             STATEMENT_COMPLEX.id,
             [Key.Alt, Key.ArrowUp],
             EXPECTED_STATEMENT_COMPLEX_UP,
@@ -831,7 +765,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             (await getCoordinate(this.browser, 'text_print')).x + 80,
             (await getCoordinate(this.browser, 'text_print')).y + 35,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             STATEMENT_COMPLEX.id,
             [Key.Alt, Key.ArrowLeft],
             EXPECTED_STATEMENT_COMPLEX_LEFT,
@@ -846,7 +780,7 @@ suite(`Statement expression unconstrained move tests`, function () {
             (await getCoordinate(this.browser, 'text_print')).x - 35,
             (await getCoordinate(this.browser, 'text_print')).y + 35,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             STATEMENT_COMPLEX.id,
             [Key.Alt, Key.ArrowRight],
             EXPECTED_STATEMENT_COMPLEX_RIGHT,
@@ -882,15 +816,9 @@ suite(`Value expression unconstrained move tests`, function () {
    * pressing ArrowDown n times.
    */
   const EXPECTED_VALUE_DOWN = [
-    null,
-    {id: 'print1', index: 2, ownIndex: 0}, // Print block with no shadow.
     {id: 'print1', index: 2, ownIndex: 0}, // Print block with no shadow.
     {id: 'print2', index: 2, ownIndex: 0}, // Print block with shadow.
-    {id: 'print2', index: 2, ownIndex: 0}, // Print block with shadow.
     {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
-    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
-    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
-    null,
   ];
 
   /**
@@ -904,24 +832,9 @@ suite(`Value expression unconstrained move tests`, function () {
    * pressing ArrowLeft n times.
    */
   const EXPECTED_VALUE_LEFT = [
-    null,
     {id: 'join1', index: 2, ownIndex: 0}, // Join second input
-    {id: 'join1', index: 2, ownIndex: 0}, // Join second input
-    {id: 'join1', index: 2, ownIndex: 0}, // Join second input
-    null,
-    null,
-    null,
     {id: 'join1', index: 1, ownIndex: 0}, // Join first input
-    {id: 'join1', index: 1, ownIndex: 0}, // Join first input
-    null,
-    null,
-    null,
-    null,
-    null,
     {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
-    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
-    {id: 'print3', index: 2, ownIndex: 0}, // Replacing  join expression.
-    null,
   ];
 
   /**
@@ -958,7 +871,7 @@ suite(`Value expression unconstrained move tests`, function () {
             (await getInputCoordinates(this.browser, 'print1', 'TEXT')).x,
             (await getCoordinate(this.browser, 'join0')).y + 80,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             VALUE_SIMPLE.id,
             [Key.Alt, Key.ArrowDown],
             EXPECTED_VALUE_DOWN,
@@ -973,7 +886,7 @@ suite(`Value expression unconstrained move tests`, function () {
             (await getInputCoordinates(this.browser, 'print1', 'TEXT')).x,
             (await getCoordinate(this.browser, 'join0')).y + 235,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             VALUE_SIMPLE.id,
             [Key.Alt, Key.ArrowUp],
             EXPECTED_VALUE_UP,
@@ -988,7 +901,7 @@ suite(`Value expression unconstrained move tests`, function () {
             (await getInputCoordinates(this.browser, 'join1', 'ADD1')).x + 30,
             (await getCoordinate(this.browser, 'join1')).y,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             VALUE_SIMPLE.id,
             [Key.Alt, Key.ArrowLeft],
             EXPECTED_VALUE_LEFT,
@@ -1003,7 +916,7 @@ suite(`Value expression unconstrained move tests`, function () {
             (await getInputCoordinates(this.browser, 'join1', 'ADD1')).x - 310,
             (await getCoordinate(this.browser, 'join1')).y,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             VALUE_SIMPLE.id,
             [Key.Alt, Key.ArrowRight],
             EXPECTED_VALUE_RIGHT,
@@ -1024,7 +937,7 @@ suite(`Value expression unconstrained move tests`, function () {
             (await getInputCoordinates(this.browser, 'print1', 'TEXT')).x,
             (await getCoordinate(this.browser, 'join0')).y + 80,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             VALUE_UNARY.id,
             [Key.Alt, Key.ArrowDown],
             EXPECTED_VALUE_DOWN,
@@ -1039,7 +952,7 @@ suite(`Value expression unconstrained move tests`, function () {
             (await getInputCoordinates(this.browser, 'print1', 'TEXT')).x,
             (await getCoordinate(this.browser, 'join0')).y + 235,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             VALUE_UNARY.id,
             [Key.Alt, Key.ArrowUp],
             EXPECTED_VALUE_UP,
@@ -1054,7 +967,7 @@ suite(`Value expression unconstrained move tests`, function () {
             (await getInputCoordinates(this.browser, 'join1', 'ADD1')).x + 30,
             (await getCoordinate(this.browser, 'join1')).y,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             VALUE_UNARY.id,
             [Key.Alt, Key.ArrowLeft],
             EXPECTED_VALUE_LEFT,
@@ -1069,7 +982,7 @@ suite(`Value expression unconstrained move tests`, function () {
             (await getInputCoordinates(this.browser, 'join1', 'ADD1')).x - 310,
             (await getCoordinate(this.browser, 'join1')).y,
           );
-          await moveBlockAndAssertCandidates(
+          await moveBlockAndAssertCandidateOrder(
             VALUE_UNARY.id,
             [Key.Alt, Key.ArrowRight],
             EXPECTED_VALUE_RIGHT,
@@ -1096,34 +1009,84 @@ suite(`Value expression unconstrained move tests`, function () {
 function moveTest(
   mover: string,
   key: string | string[],
-  candidates: Array<{id: string; index: number} | null>,
+  candidates: Array<{id: string; index: number}>,
 ) {
   return async function (this: Mocha.Context) {
-    await moveBlockAndAssertCandidates(mover, key, candidates, this.browser);
+    // Navigate to block to be moved and intiate move.
+    await focusOnBlock(this.browser, mover);
+    const initialInfo = await getFocusedNeighbourInfo(this.browser);
+    await sendKeyAndWait(this.browser, 'm');
+    // Press specified key multiple times, checking connection candidates.
+    for (let i = 0; i < candidates.length; i++) {
+      const candidate = await getConnectionCandidate(this.browser);
+      chai.assert.deepEqual(candidate, candidates[i]);
+      await sendKeyAndWait(this.browser, key);
+    }
+
+    // Finish move and check final location of moved block.
+    await sendKeyAndWait(this.browser, Key.Enter);
+    const finalInfo = await getFocusedNeighbourInfo(this.browser);
+    chai.assert.deepEqual(initialInfo, finalInfo);
   };
 }
 
-async function moveBlockAndAssertCandidates(
+/**
+ * Assert that repeatedly moving the "mover" block with the provided key command
+ * results in a sequence of unique candidate connections that matches the
+ * provided candidates in the same order.
+ *
+ * This allows for incremental movements that result in the same candidate
+ * multiple times. After each time the block is moved, it's current candidate
+ * connection will be compared to the previous candidate connection, and it will
+ * repeatedly move the block until a different candidate is found before
+ * comparing that new candidate to the next expected candidate in the sequence.
+ *
+ * @param mover The block to be moved.
+ * @param key The key command to use to move the block.
+ * @param candidates The ordered sequence of expected candidate connections.
+ * @param browser The browser context.
+ */
+async function moveBlockAndAssertCandidateOrder(
   mover: string,
   key: string | string[],
-  candidates: Array<{id: string; index: number} | null>,
+  candidates: Array<{id: string; index: number; ownIndex: number} | null>,
   browser: Browser,
 ) {
   // Navigate to block to be moved and intiate move.
   await focusOnBlock(browser, mover);
-  const initialInfo = await getFocusedNeighbourInfo(browser);
   await sendKeyAndWait(browser, 'm');
-  // Press specified key multiple times, checking connection candidates.
+  let lastCandidate: {id: string; index: number; ownIndex: number} | null =
+    null;
   for (let i = 0; i < candidates.length; i++) {
-    const candidate = await getConnectionCandidate(browser);
-    chai.assert.deepEqual(candidate, candidates[i], `At candidate index ${i}`);
-    await sendKeyAndWait(browser, key);
-  }
+    // Press specified key multiple times until a new candidate is found.
+    let candidate: {id: string; index: number; ownIndex: number} | null = null;
+    const maxAttempts = 10;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      await sendKeyAndWait(browser, key);
 
-  // Finish move and check final location of moved block.
-  await sendKeyAndWait(browser, Key.Enter);
-  const finalInfo = await getFocusedNeighbourInfo(browser);
-  chai.assert.deepEqual(initialInfo, finalInfo);
+      candidate = await getConnectionCandidate(browser);
+      // If no candidate was found yet, try moving the block again.
+      if (candidate === null) {
+        continue;
+      }
+
+      const sameAsLastCandidate =
+        candidate.id === lastCandidate?.id &&
+        candidate.index === lastCandidate?.index &&
+        candidate.ownIndex === lastCandidate?.ownIndex;
+      // If the current candidate still matches a previously verified one, move
+      // and try again.
+      if (sameAsLastCandidate) {
+        continue;
+      }
+
+      // A new candidate connection was found. Verify that it's the next
+      // expected candidate before moving again.
+      break;
+    }
+    chai.assert.deepEqual(candidate, candidates[i], `At candidate index ${i}`);
+    lastCandidate = candidate;
+  }
 }
 
 /**
@@ -1294,7 +1257,7 @@ function moveBlock(
  */
 function getConnectionCandidate(
   browser: Browser,
-): Promise<{id: string; index: number} | null> {
+): Promise<{id: string; index: number; ownIndex: number} | null> {
   return browser.execute(() => {
     const focused = Blockly.getFocusManager().getFocusedNode();
     if (!focused) throw new Error('nothing focused');
