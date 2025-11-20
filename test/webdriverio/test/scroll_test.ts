@@ -26,17 +26,17 @@ suite('Scrolling into view', function () {
   // N.B. that this is called only one per suite, not once per test.
   suiteSetup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    this.windowSize = await this.browser.getWindowSize();
-    await this.browser.setWindowSize(800, 600);
+    // this.windowSize = await this.browser.getWindowSize();
+    await this.browser.setViewport({width: 800, height: 600, devicePixelRatio: 1});
     await this.browser.pause(PAUSE_TIME);
   });
 
   // Restore original browser window size.
   suiteTeardown(async function () {
-    await this.browser.setWindowSize(
-      this.windowSize.width,
-      this.windowSize.height,
-    );
+    // await this.browser.setWindowSize(
+    //   this.windowSize.width,
+    //   this.windowSize.height,
+    // );
   });
 
   // Clear the workspace and load start blocks.
