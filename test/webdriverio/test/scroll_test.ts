@@ -21,22 +21,17 @@ suite('Scrolling into view', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 
-  // Resize browser to provide predictable small window size for scrolling.
+  // Resize browser to provide predictable small viewport size for scrolling.
   //
   // N.B. that this is called only one per suite, not once per test.
   suiteSetup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    // this.windowSize = await this.browser.getWindowSize();
-    await this.browser.setViewport({width: 800, height: 600, devicePixelRatio: 1});
+    // Note that a viewport is used here over adjusting window size to ensure
+    // consistency across platforms and environments.
+    await this.browser.setViewport({
+      width: 800, height: 600, devicePixelRatio: 1
+    });
     await this.browser.pause(PAUSE_TIME);
-  });
-
-  // Restore original browser window size.
-  suiteTeardown(async function () {
-    // await this.browser.setWindowSize(
-    //   this.windowSize.width,
-    //   this.windowSize.height,
-    // );
   });
 
   // Clear the workspace and load start blocks.
@@ -44,7 +39,7 @@ suite('Scrolling into view', function () {
     await testSetup(testFileLocations.BASE, this.timeout());
   });
 
-  test.only('Insert scrolls new block into view', async function () {
+  test('Insert scrolls new block into view', async function () {
     // Increase timeout to 10s for this longer test.
     this.timeout(PAUSE_TIME ? 0 : 10000);
 
@@ -72,27 +67,6 @@ suite('Scrolling into view', function () {
 
     // Assert new block has been scrolled into the viewport.
     await this.browser.pause(PAUSE_TIME);
-    const blockBounds = await this.browser.execute(() => {
-      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
-      const block = workspace.getBlocksByType(
-        'controls_if',
-      )[0] as Blockly.BlockSvg;
-      const blockBounds = block.getBoundingRectangleWithoutChildren();
-      return blockBounds;
-    });
-    console.log("block bounds:", blockBounds);
-    const viewport = await this.browser.execute(() => {
-      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
-      const rawViewport = workspace.getMetricsManager().getViewMetrics(true);
-      const viewport = new Blockly.utils.Rect(
-        rawViewport.top,
-        rawViewport.top + rawViewport.height,
-        rawViewport.left,
-        rawViewport.left + rawViewport.width,
-      );
-      return viewport;
-    });
-    console.log("viewport:", viewport);
     const inViewport = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
