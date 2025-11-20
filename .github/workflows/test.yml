@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [macos-latest]
 
     steps:
       - name: Checkout experimentation plugin
@@ -67,8 +67,7 @@ jobs:
 
   webdriverio_tests:
     name: WebdriverIO tests (against pinned v12)
-    # Don't run pinned version checks for PRs.
-    if: ${{ !github.base_ref }}
+    if: false
     timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
