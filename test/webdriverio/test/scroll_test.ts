@@ -44,7 +44,7 @@ suite('Scrolling into view', function () {
     await testSetup(testFileLocations.BASE, this.timeout());
   });
 
-  test('Insert scrolls new block into view', async function () {
+  test.only('Insert scrolls new block into view', async function () {
     // Increase timeout to 10s for this longer test.
     this.timeout(PAUSE_TIME ? 0 : 10000);
 
@@ -72,6 +72,27 @@ suite('Scrolling into view', function () {
 
     // Assert new block has been scrolled into the viewport.
     await this.browser.pause(PAUSE_TIME);
+    const blockBounds = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      const block = workspace.getBlocksByType(
+        'controls_if',
+      )[0] as Blockly.BlockSvg;
+      const blockBounds = block.getBoundingRectangleWithoutChildren();
+      return blockBounds;
+    });
+    console.log("block bounds:", blockBounds);
+    const viewport = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      const rawViewport = workspace.getMetricsManager().getViewMetrics(true);
+      const viewport = new Blockly.utils.Rect(
+        rawViewport.top,
+        rawViewport.top + rawViewport.height,
+        rawViewport.left,
+        rawViewport.left + rawViewport.width,
+      );
+      return viewport;
+    });
+    console.log("viewport:", viewport);
     const inViewport = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
