@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: test-failure-screenshots
-          path: test/webdriverio/test/failures
+          path: main/test/webdriverio/test/failures
 
   webdriverio_tests:
     name: WebdriverIO tests (against pinned v12)
