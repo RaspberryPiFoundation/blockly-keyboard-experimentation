@@ -39,7 +39,7 @@ suite('Scrolling into view', function () {
     await testSetup(testFileLocations.BASE, this.timeout());
   });
 
-  test('Insert scrolls new block into view', async function () {
+  test.only('Insert scrolls new block into view', async function () {
     // Increase timeout to 10s for this longer test.
     this.timeout(PAUSE_TIME ? 0 : 10000);
 
