@@ -9,6 +9,7 @@ import * as chai from 'chai';
 import {Key} from 'webdriverio';
 import {
   sendKeyAndWait,
+  keyUp,
   keyDown,
   keyRight,
   PAUSE_TIME,
@@ -85,7 +86,10 @@ suite('Scrolling into view', function () {
     // Insert and confirm the test block which should be scrolled into view.
     await sendKeyAndWait(this.browser, 't');
     await keyRight(this.browser);
-    await sendKeyAndWait(this.browser, Key.Enter, 2);
+    await sendKeyAndWait(this.browser, Key.Enter);
+    await keyDown(this.browser);
+    await keyUp(this.browser);
+    await sendKeyAndWait(this.browser, Key.Enter);
     const focusedNodeId2 = await this.browser.execute(() => {
       return Blockly.getFocusManager().getFocusedNode()?.getFocusableElement()?.id;
     });
