@@ -63,7 +63,11 @@ jobs:
       - name: Run tests
         run: |
           cd main
-          npm run test:ci
+          for i in $(seq 1 50);
+          do
+            echo "Attempt $i"
+            npm run test:ci
+          done
 
   webdriverio_tests:
     name: WebdriverIO tests (against pinned v12)
