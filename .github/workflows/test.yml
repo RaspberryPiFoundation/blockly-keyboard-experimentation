@@ -15,7 +15,7 @@ permissions:
 jobs:
   webdriverio_tests_tip_of_tree_v12:
     name: WebdriverIO tests (against tip-of-tree core develop)
-    timeout-minutes: 10
+    # timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -60,13 +60,19 @@ jobs:
           npm link blockly
           cd ..
 
-      - name: Run tests
+      - name: Build tests
         run: |
           cd main
+          npm run wdio:clean
+          npm run wdio:build
+
+      - name: Run tests (up to 50 times)
+        run: |
+          cd test/webdriverio/test
           for i in $(seq 1 50);
           do
             echo "Attempt $i"
-            npm run test:ci
+            npx mocha --timeout 30000 dist
           done
 
   webdriverio_tests:
