@@ -15,6 +15,7 @@ import {
   testFileLocations,
   testSetup,
   sendKeyAndWait,
+  checkForFailures,
 } from './test_setup.js';
 
 suite('Duplicate test', function () {
@@ -25,6 +26,10 @@ suite('Duplicate test', function () {
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Duplicate block', async function () {

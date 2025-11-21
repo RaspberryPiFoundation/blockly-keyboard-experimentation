@@ -9,39 +9,40 @@ import * as chai from 'chai';
 import {Key} from 'webdriverio';
 import {
   sendKeyAndWait,
+  keyUp,
   keyDown,
   keyRight,
   PAUSE_TIME,
   tabNavigateToWorkspace,
   testFileLocations,
   testSetup,
+  checkForFailures,
 } from './test_setup.js';
 
 suite('Scrolling into view', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 
-  // Resize browser to provide predictable small window size for scrolling.
+  // Resize browser to provide predictable small viewport size for scrolling.
   //
   // N.B. that this is called only one per suite, not once per test.
   suiteSetup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    this.windowSize = await this.browser.getWindowSize();
-    await this.browser.setWindowSize(800, 600);
+    // Note that a viewport is used here over adjusting window size to ensure
+    // consistency across platforms and environments.
+    await this.browser.setViewport({
+      width: 800, height: 600, devicePixelRatio: 1
+    });
     await this.browser.pause(PAUSE_TIME);
-  });
-
-  // Restore original browser window size.
-  suiteTeardown(async function () {
-    await this.browser.setWindowSize(
-      this.windowSize.width,
-      this.windowSize.height,
-    );
   });
 
   // Clear the workspace and load start blocks.
   setup(async function () {
     await testSetup(testFileLocations.BASE, this.timeout());
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Insert scrolls new block into view', async function () {
@@ -55,7 +56,18 @@ suite('Scrolling into view', function () {
     await sendKeyAndWait(this.browser, 'm');
     await sendKeyAndWait(this.browser, [Key.Alt, Key.ArrowDown], 25);
     await sendKeyAndWait(this.browser, Key.Enter);
+    const movedBlockBounds = await this.browser.execute(() => {
+      const block = Blockly.getFocusManager().getFocusedNode() as Blockly.BlockSvg;
+      const blockBounds = block.getBoundingRectangleWithoutChildren();
+      return blockBounds;
+    });
+    console.log("just moved block bounds:", movedBlockBounds);
     // Scroll back up, leaving cursor on the draw block out of the viewport.
+    const scrollPosition1 = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      return [workspace.scrollX, workspace.scrollY];
+    });
+    console.log("workspace scroll position before scroll:", scrollPosition1);
     await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       workspace.scrollBoundsIntoView(
@@ -64,14 +76,67 @@ suite('Scrolling into view', function () {
         ).getBoundingRectangleWithoutChildren(),
       );
     });
+    // Pause to allow scrolling to stabilize before proceeding.
+    await this.browser.pause(PAUSE_TIME);
+    const scrollPosition2 = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      return [workspace.scrollX, workspace.scrollY];
+    });
+    console.log("workspace scroll position after scroll:", scrollPosition2);
+    const focusedNodeId1 = await this.browser.execute(() => {
+      return Blockly.getFocusManager().getFocusedNode()?.getFocusableElement()?.id;
+    });
+    console.log("current focused node before insert:", focusedNodeId1);
 
     // Insert and confirm the test block which should be scrolled into view.
     await sendKeyAndWait(this.browser, 't');
     await keyRight(this.browser);
-    await sendKeyAndWait(this.browser, Key.Enter, 2);
+    await sendKeyAndWait(this.browser, Key.Enter);
+    await keyDown(this.browser);
+    await keyUp(this.browser);
+    await sendKeyAndWait(this.browser, Key.Enter);
+    const focusedNodeId2 = await this.browser.execute(() => {
+      return Blockly.getFocusManager().getFocusedNode()?.getFocusableElement()?.id;
+    });
+    console.log("current focused node after insert:", focusedNodeId2);
+    const scrollPosition3 = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      return [workspace.scrollX, workspace.scrollY];
+    });
+    console.log("workspace scroll position after insert:", scrollPosition3);
 
     // Assert new block has been scrolled into the viewport.
     await this.browser.pause(PAUSE_TIME);
+    const blockBounds = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      const block = workspace.getBlocksByType(
+        'controls_if',
+      )[0] as Blockly.BlockSvg;
+      const blockBounds = block.getBoundingRectangleWithoutChildren();
+      return blockBounds;
+    });
+    console.log("block bounds:", blockBounds);
+    const [blockParentBounds, blockParentId] = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      const block = workspace.getBlocksByType(
+        'controls_if',
+      )[0] as Blockly.BlockSvg;
+      const blockBounds = block.getSurroundParent()?.getBoundingRectangleWithoutChildren();
+      return [blockBounds, block.getSurroundParent()?.getFocusableElement()?.id];
+    });
+    console.log("block's parent bounds:", blockParentBounds, "id:", blockParentId);
+    const viewport = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      const rawViewport = workspace.getMetricsManager().getViewMetrics(true);
+      const viewport = new Blockly.utils.Rect(
+        rawViewport.top,
+        rawViewport.top + rawViewport.height,
+        rawViewport.left,
+        rawViewport.left + rawViewport.width,
+      );
+      return viewport;
+    });
+    console.log("viewport:", viewport);
     const inViewport = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(

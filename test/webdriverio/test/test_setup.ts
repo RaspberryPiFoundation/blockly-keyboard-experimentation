@@ -65,10 +65,8 @@ export async function driverSetup(
       'goog:chromeOptions': {
         args: ['--allow-file-access-from-files'],
       },
-      // We aren't (yet) using any BiDi features, and BiDi is sensitive to
-      // mismatches between Chrome version and Chromedriver version.
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      'wdio:enforceWebDriverClassic': true,
+      // Allows certain BiDi features to work correctly.
+      'webSocketUrl': true
     },
     waitforTimeout: wdioWaitTimeoutMs,
     logLevel: 'warn' as const,
@@ -128,6 +126,16 @@ export async function testSetup(
     .$('.blocklySvg .blocklyWorkspace > .blocklyBlockCanvas')
     .waitForExist();
   return driver;
+}
+
+export async function checkForFailures(
+  browser: WebdriverIO.Browser,
+  testTitle: string,
+  testState: string | undefined
+) {
+  if (testState === 'failed') {
+    await browser.saveScreenshot(`failures/${testTitle}.png`);
+  }
 }
 
 /**

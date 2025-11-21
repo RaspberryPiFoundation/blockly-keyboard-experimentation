@@ -18,6 +18,7 @@ import {
   sendKeyAndWait,
   keyRight,
   focusOnBlockField,
+  checkForFailures,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -32,6 +33,10 @@ suite('Deleting Blocks', function () {
       this.timeout(),
     );
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Deleting block selects parent block', async function () {

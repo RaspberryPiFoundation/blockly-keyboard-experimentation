@@ -17,6 +17,7 @@ import {
   sendKeyAndWait,
   keyRight,
   keyDown,
+  checkForFailures,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -38,6 +39,10 @@ suite('Mutator navigation', function () {
       // Activate the icon
       await sendKeyAndWait(this.browser, Key.Enter);
     };
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Enter opens mutator', async function () {

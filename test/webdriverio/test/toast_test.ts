@@ -6,7 +6,7 @@
 
 import * as chai from 'chai';
 import * as Blockly from 'blockly/core';
-import {PAUSE_TIME, testFileLocations, testSetup} from './test_setup.js';
+import {PAUSE_TIME, testFileLocations, testSetup, checkForFailures} from './test_setup.js';
 
 suite('HTML toasts', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
@@ -16,6 +16,10 @@ suite('HTML toasts', function () {
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Can be displayed', async function () {

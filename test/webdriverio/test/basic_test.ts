@@ -22,6 +22,7 @@ import {
   keyRight,
   keyUp,
   keyDown,
+  checkForFailures,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -35,6 +36,10 @@ suite('Keyboard navigation on Blocks', function () {
       testFileLocations.NAVIGATION_TEST_BLOCKS,
       this.timeout(),
     );
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Default workspace', async function () {
@@ -233,6 +238,10 @@ suite('Keyboard navigation on Fields', function () {
       testFileLocations.NAVIGATION_TEST_BLOCKS,
       this.timeout(),
     );
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Up from first field selects block', async function () {

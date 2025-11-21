@@ -13,6 +13,7 @@ import {
   testFileLocations,
   testSetup,
   sendKeyAndWait,
+  checkForFailures,
 } from './test_setup.js';
 
 suite('Stack navigation', function () {
@@ -20,6 +21,10 @@ suite('Stack navigation', function () {
   setup(async function () {
     this.browser = await testSetup(testFileLocations.COMMENTS, this.timeout());
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Next', async function () {

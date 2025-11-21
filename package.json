@@ -22,9 +22,9 @@
     "wdio:build": "npm run wdio:build:app && npm run wdio:build:tests",
     "wdio:build:app": "cd test/webdriverio && webpack",
     "wdio:build:tests": "tsc -p ./test/webdriverio/test/tsconfig.json",
-    "wdio:clean": "cd test/webdriverio/test && rm -rf dist",
-    "wdio:run": "npm run wdio:build && cd test/webdriverio/test && npx mocha dist",
-    "wdio:run:ci": "npm run wdio:build && cd test/webdriverio/test && npx mocha --timeout 30000 dist"
+    "wdio:clean": "cd test/webdriverio/test && rm -rf dist && rm -rf failures",
+    "wdio:run": "npm run wdio:build && cd test/webdriverio/test && mkdir failures && npx mocha dist",
+    "wdio:run:ci": "npm run wdio:build && cd test/webdriverio/test && mkdir failures && npx mocha --timeout 30000 dist"
   },
   "main": "./dist/index.js",
   "module": "./src/index.js",
@@ -77,7 +77,7 @@
     "prettier": "^3.3.1",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",
-    "webdriverio": "^9.12.1"
+    "webdriverio": "^9.20.1"
   },
   "peerDependencies": {
     "blockly": "^12.3.0"

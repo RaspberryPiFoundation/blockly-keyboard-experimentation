@@ -20,6 +20,7 @@ import {
   getCurrentFocusNodeId,
   getCurrentFocusedBlockId,
   tabNavigateToToolbox,
+  checkForFailures,
 } from './test_setup.js';
 
 suite('Toolbox and flyout test', function () {
@@ -30,6 +31,10 @@ suite('Toolbox and flyout test', function () {
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Tab navigating to toolbox should open flyout', async function () {

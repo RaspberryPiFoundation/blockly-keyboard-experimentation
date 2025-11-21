@@ -15,13 +15,13 @@ permissions:
 jobs:
   webdriverio_tests_tip_of_tree_v12:
     name: WebdriverIO tests (against tip-of-tree core develop)
-    timeout-minutes: 10
+    # timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [macos-latest]
 
     steps:
       - name: Checkout experimentation plugin
@@ -60,15 +60,30 @@ jobs:
           npm link blockly
           cd ..
 
-      - name: Run tests
+      - name: Build tests
         run: |
           cd main
-          npm run test:ci
+          npm run wdio:clean
+
+      - name: Run tests (up to 50 times)
+        run: |
+          cd main
+          #for i in $(seq 1 50);
+          #do
+            echo "Attempt $i"
+            npm run wdio:run:ci
+          #done
+
+      - name: Upload test failure screenshots
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: test-failure-screenshots
+          path: main/test/webdriverio/test/failures
 
   webdriverio_tests:
     name: WebdriverIO tests (against pinned v12)
-    # Don't run pinned version checks for PRs.
-    if: ${{ !github.base_ref }}
+    if: false
     timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 

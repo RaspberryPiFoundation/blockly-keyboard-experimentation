@@ -14,6 +14,7 @@ import {
   tabNavigateToWorkspace,
   testFileLocations,
   testSetup,
+  checkForFailures,
 } from './test_setup.js';
 import * as chai from 'chai';
 
@@ -25,6 +26,10 @@ suite('Styling test', function () {
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   async function strokeColorEquals(
