@@ -107,6 +107,15 @@ suite('Scrolling into view', function () {
       return blockBounds;
     });
     console.log("block bounds:", blockBounds);
+    const [blockParentBounds, blockParentId] = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      const block = workspace.getBlocksByType(
+        'controls_if',
+      )[0] as Blockly.BlockSvg;
+      const blockBounds = block.getParent()?.getBoundingRectangleWithoutChildren();
+      return [blockBounds, block.getParent()?.getFocusableElement()?.id];
+    });
+    console.log("block's parent bounds:", blockParentBounds, "id:", blockParentId);
     const viewport = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const rawViewport = workspace.getMetricsManager().getViewMetrics(true);
