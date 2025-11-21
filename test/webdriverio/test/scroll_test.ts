@@ -84,6 +84,11 @@ suite('Scrolling into view', function () {
       return Blockly.getFocusManager().getFocusedNode()?.getFocusableElement()?.id;
     });
     console.log("current focused node after insert:", focusedNodeId2);
+    const scrollPosition3 = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      return [workspace.scrollX, workspace.scrollY];
+    });
+    console.log("workspace scroll position after insert:", scrollPosition3);
 
     // Assert new block has been scrolled into the viewport.
     await this.browser.pause(PAUSE_TIME);
