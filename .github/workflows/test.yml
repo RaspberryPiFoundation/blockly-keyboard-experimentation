@@ -67,6 +67,7 @@ jobs:
 
       - name: Run tests (up to 50 times)
         run: |
+          cd main
           #for i in $(seq 1 50);
           #do
             echo "Attempt $i"
