@@ -18,6 +18,7 @@ import {
   blockIsPresent,
   getFocusedBlockType,
   sendKeyAndWait,
+  checkForFailures,
 } from './test_setup.js';
 import {Key, KeyAction, PointerAction, WheelAction} from 'webdriverio';
 
@@ -29,6 +30,10 @@ suite('Clipboard test', function () {
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Copy and paste while block selected', async function () {

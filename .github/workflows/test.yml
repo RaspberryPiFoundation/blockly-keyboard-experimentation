@@ -69,11 +69,18 @@ jobs:
       - name: Run tests (up to 50 times)
         run: |
           cd main/test/webdriverio/test
-          for i in $(seq 1 50);
-          do
+          #for i in $(seq 1 50);
+          #do
             echo "Attempt $i"
             npx mocha --timeout 30000 dist
-          done
+          #done
+
+      - name: Upload test failure screenshots
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: test-failure-screenshots
+          path: test/webdriverio/test/failures
 
   webdriverio_tests:
     name: WebdriverIO tests (against pinned v12)

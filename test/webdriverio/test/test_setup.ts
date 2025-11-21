@@ -128,6 +128,16 @@ export async function testSetup(
   return driver;
 }
 
+export async function checkForFailures(
+  browser: WebdriverIO.Browser,
+  testTitle: string,
+  testState: string | undefined
+) {
+  if (testState === 'failed') {
+    await browser.saveScreenshot(`failures/${testTitle}.png`);
+  }
+}
+
 /**
  * Replaces OS-specific path with POSIX style path.
  *

@@ -22,8 +22,8 @@
     "wdio:build": "npm run wdio:build:app && npm run wdio:build:tests",
     "wdio:build:app": "cd test/webdriverio && webpack",
     "wdio:build:tests": "tsc -p ./test/webdriverio/test/tsconfig.json",
-    "wdio:clean": "cd test/webdriverio/test && rm -rf dist",
-    "wdio:run": "npm run wdio:build && cd test/webdriverio/test && npx mocha dist",
+    "wdio:clean": "cd test/webdriverio/test && rm -rf dist && rm -rf failures",
+    "wdio:run": "npm run wdio:build && cd test/webdriverio/test && mkdir failures && npx mocha dist",
     "wdio:run:ci": "npm run wdio:build && cd test/webdriverio/test && npx mocha --timeout 30000 dist"
   },
   "main": "./dist/index.js",

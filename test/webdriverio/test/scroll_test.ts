@@ -16,6 +16,7 @@ import {
   tabNavigateToWorkspace,
   testFileLocations,
   testSetup,
+  checkForFailures,
 } from './test_setup.js';
 
 suite('Scrolling into view', function () {
@@ -38,6 +39,10 @@ suite('Scrolling into view', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     await testSetup(testFileLocations.BASE, this.timeout());
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Insert scrolls new block into view', async function () {

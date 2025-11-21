@@ -20,6 +20,7 @@ import {
   keyUp,
   contextMenuItems,
   PAUSE_TIME,
+  checkForFailures,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -67,6 +68,10 @@ suite('Workspace comment navigation', function () {
         return [bounds.left, bounds.top];
       }, commentId);
     };
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Navigate forward from block to workspace comment', async function () {

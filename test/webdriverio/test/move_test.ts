@@ -16,6 +16,7 @@ import {
   sendKeyAndWait,
   keyDown,
   contextMenuItems,
+  checkForFailures,
 } from './test_setup.js';
 
 suite.skip('Move start tests', function () {
@@ -30,6 +31,10 @@ suite.skip('Move start tests', function () {
       this.timeout(),
     );
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   // When a move of a statement block begins, it is expected that only
@@ -192,6 +197,10 @@ suite('Statement move tests', function () {
       this.timeout(),
     );
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   /** Serialized simple statement block with no statement inputs. */
@@ -475,6 +484,10 @@ suite(`Value expression move tests`, function () {
           this.timeout(),
         );
         await this.browser.pause(PAUSE_TIME);
+      });
+
+      teardown(async function() {
+        await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
       });
 
       suite('Constrained moves of a simple reporter block', function () {

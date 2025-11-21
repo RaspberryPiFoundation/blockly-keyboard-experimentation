@@ -20,6 +20,7 @@ import {
   sendKeyAndWait,
   keyRight,
   contextMenuItems,
+  checkForFailures,
 } from './test_setup.js';
 
 const isDarwin = process.platform === 'darwin';
@@ -97,6 +98,10 @@ suite('Menus test', function () {
       this.timeout(),
     );
     await this.browser.pause(PAUSE_TIME);
+  });
+
+  teardown(async function() {
+    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
   test('Menu action via keyboard on block opens menu', async function () {

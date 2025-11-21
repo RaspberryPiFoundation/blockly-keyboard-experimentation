@@ -15,6 +15,7 @@ import {
   tabNavigateToWorkspace,
   clickBlock,
   sendKeyAndWait,
+  checkForFailures,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -46,6 +47,10 @@ suite(
 
       // Start with the workspace focused.
       await tabNavigateToWorkspace(this.browser);
+    });
+
+    teardown(async function() {
+      await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
     });
 
     test('T to open toolbox enables keyboard mode', async function () {
