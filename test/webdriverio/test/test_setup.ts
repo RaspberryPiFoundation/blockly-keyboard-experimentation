@@ -42,7 +42,7 @@ let driver: webdriverio.Browser | null = null;
  * the browser.wait* functions if you need your test to wait for
  * something to happen after sending input.
  */
-export const PAUSE_TIME = 0;
+export const PAUSE_TIME = 200;
 
 /**
  * Start up WebdriverIO and load the test page. This should only be

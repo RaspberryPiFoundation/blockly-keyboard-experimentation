@@ -71,11 +71,19 @@ suite('Scrolling into view', function () {
       return [workspace.scrollX, workspace.scrollY];
     });
     console.log("workspace scroll position after scroll:", scrollPosition2);
+    const focusedNodeId1 = await this.browser.execute(() => {
+      return Blockly.getFocusManager().getFocusedNode()?.getFocusableElement()?.id;
+    });
+    console.log("current focused node before insert:", focusedNodeId1);
 
     // Insert and confirm the test block which should be scrolled into view.
     await sendKeyAndWait(this.browser, 't');
     await keyRight(this.browser);
     await sendKeyAndWait(this.browser, Key.Enter, 2);
+    const focusedNodeId2 = await this.browser.execute(() => {
+      return Blockly.getFocusManager().getFocusedNode()?.getFocusableElement()?.id;
+    });
+    console.log("current focused node after insert:", focusedNodeId2);
 
     // Assert new block has been scrolled into the viewport.
     await this.browser.pause(PAUSE_TIME);
