@@ -39,7 +39,7 @@ suite('Scrolling into view', function () {
     await testSetup(testFileLocations.BASE, this.timeout());
   });
 
-  test('Insert scrolls new block into view', async function () {
+  test.only('Insert scrolls new block into view', async function () {
     // Increase timeout to 10s for this longer test.
     this.timeout(PAUSE_TIME ? 0 : 10000);
 
@@ -51,6 +51,11 @@ suite('Scrolling into view', function () {
     await sendKeyAndWait(this.browser, [Key.Alt, Key.ArrowDown], 25);
     await sendKeyAndWait(this.browser, Key.Enter);
     // Scroll back up, leaving cursor on the draw block out of the viewport.
+    const scrollPosition1 = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      return [workspace.scrollX, workspace.scrollY];
+    });
+    console.log("workspace scroll position before scroll:", scrollPosition1);
     await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       workspace.scrollBoundsIntoView(
@@ -61,6 +66,11 @@ suite('Scrolling into view', function () {
     });
     // Pause to allow scrolling to stabilize before proceeding.
     await this.browser.pause(PAUSE_TIME);
+    const scrollPosition2 = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      return [workspace.scrollX, workspace.scrollY];
+    });
+    console.log("workspace scroll position after scroll:", scrollPosition2);
 
     // Insert and confirm the test block which should be scrolled into view.
     await sendKeyAndWait(this.browser, 't');
@@ -69,6 +79,27 @@ suite('Scrolling into view', function () {
 
     // Assert new block has been scrolled into the viewport.
     await this.browser.pause(PAUSE_TIME);
+    const blockBounds = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      const block = workspace.getBlocksByType(
+        'controls_if',
+      )[0] as Blockly.BlockSvg;
+      const blockBounds = block.getBoundingRectangleWithoutChildren();
+      return blockBounds;
+    });
+    console.log("block bounds:", blockBounds);
+    const viewport = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      const rawViewport = workspace.getMetricsManager().getViewMetrics(true);
+      const viewport = new Blockly.utils.Rect(
+        rawViewport.top,
+        rawViewport.top + rawViewport.height,
+        rawViewport.left,
+        rawViewport.left + rawViewport.width,
+      );
+      return viewport;
+    });
+    console.log("viewport:", viewport);
     const inViewport = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
