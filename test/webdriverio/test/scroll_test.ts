@@ -50,6 +50,12 @@ suite('Scrolling into view', function () {
     await sendKeyAndWait(this.browser, 'm');
     await sendKeyAndWait(this.browser, [Key.Alt, Key.ArrowDown], 25);
     await sendKeyAndWait(this.browser, Key.Enter);
+    const movedBlockBounds = await this.browser.execute(() => {
+      const block = Blockly.getFocusManager().getFocusedNode() as Blockly.BlockSvg;
+      const blockBounds = block.getBoundingRectangleWithoutChildren();
+      return blockBounds;
+    });
+    console.log("just moved block bounds:", movedBlockBounds);
     // Scroll back up, leaving cursor on the draw block out of the viewport.
     const scrollPosition1 = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
