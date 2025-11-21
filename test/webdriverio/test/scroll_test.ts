@@ -64,6 +64,7 @@ suite('Scrolling into view', function () {
         ).getBoundingRectangleWithoutChildren(),
       );
     });
+    await this.browser.pause(PAUSE_TIME);
     // const scrollPosition2 = await this.browser.execute(() => {
     //   const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
     //   return [workspace.scrollX, workspace.scrollY];
