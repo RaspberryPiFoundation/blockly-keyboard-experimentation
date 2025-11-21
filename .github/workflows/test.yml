@@ -64,15 +64,13 @@ jobs:
         run: |
           cd main
           npm run wdio:clean
-          npm run wdio:build
 
       - name: Run tests (up to 50 times)
         run: |
-          cd main/test/webdriverio/test
           #for i in $(seq 1 50);
           #do
             echo "Attempt $i"
-            npx mocha --timeout 30000 dist
+            npm run wdio:run:ci
           #done
 
       - name: Upload test failure screenshots
