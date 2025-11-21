@@ -112,8 +112,8 @@ suite('Scrolling into view', function () {
       const block = workspace.getBlocksByType(
         'controls_if',
       )[0] as Blockly.BlockSvg;
-      const blockBounds = block.getParent()?.getBoundingRectangleWithoutChildren();
-      return [blockBounds, block.getParent()?.getFocusableElement()?.id];
+      const blockBounds = block.getSurroundParent()?.getBoundingRectangleWithoutChildren();
+      return [blockBounds, block.getSurroundParent()?.getFocusableElement()?.id];
     });
     console.log("block's parent bounds:", blockParentBounds, "id:", blockParentId);
     const viewport = await this.browser.execute(() => {
