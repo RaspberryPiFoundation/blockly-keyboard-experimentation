@@ -117,6 +117,7 @@ suite('Scrolling into view', function () {
 
     // Assert new block has been scrolled into the viewport.
     await this.browser.pause(5000);
+    await this.browser.saveScreenshot(`failures/extra_snapshot_for_verification.png`);
     const blockBounds = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
