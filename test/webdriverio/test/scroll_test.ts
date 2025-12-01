@@ -201,7 +201,7 @@ suite('Scrolling into view', function () {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       return workspace.getBlocksByType(
         'controls_if',
-      ).map((block) => { (block as Blockly.BlockSvg).id });
+      ).map((block) => { return (block as Blockly.BlockSvg).getFocusableElement().id });
     });
     console.log('matched blocks to controls_if:', matchedBlocks);
     const inViewport = await this.browser.execute(() => {
