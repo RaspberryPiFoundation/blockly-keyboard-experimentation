@@ -66,7 +66,11 @@ export async function driverSetup(
         args: ['--allow-file-access-from-files'],
       },
       // Allows certain BiDi features to work correctly.
-      'webSocketUrl': true
+      // 'webSocketUrl': true
+      // We aren't (yet) using any BiDi features, and BiDi is sensitive to
+      // mismatches between Chrome version and Chromedriver version.
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      'wdio:enforceWebDriverClassic': true,
     },
     waitforTimeout: wdioWaitTimeoutMs,
     logLevel: 'warn' as const,

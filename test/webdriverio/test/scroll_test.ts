@@ -30,11 +30,20 @@ suite('Scrolling into view', function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
     // Note that a viewport is used here over adjusting window size to ensure
     // consistency across platforms and environments.
-    await this.browser.setViewport({
-      width: 800, height: 600, devicePixelRatio: 1
-    });
+    // await this.browser.setViewport({
+      // width: 800, height: 600, devicePixelRatio: 1
+    // });
+    this.windowSize = await this.browser.getWindowSize();
+    await this.browser.setWindowSize(800, 600);
     await this.browser.pause(PAUSE_TIME);
   });
+
+  // Restore original browser window size.
+  suiteTeardown(async function () {
+  await this.browser.setWindowSize(
+    this.windowSize.width,
+    this.windowSize.height,
+  );
 
   // Clear the workspace and load start blocks.
   setup(async function () {
