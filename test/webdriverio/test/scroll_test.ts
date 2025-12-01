@@ -116,6 +116,14 @@ suite('Scrolling into view', function () {
       return blockBounds;
     });
     console.log("block bounds:", blockBounds);
+    const blockPosition = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      const block = workspace.getBlocksByType(
+        'controls_if',
+      )[0] as Blockly.BlockSvg;
+      return block.getRelativeToSurfaceXY();
+    });
+    console.log("block position:", blockPosition);
     const [blockParentBounds, blockParentId] = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
