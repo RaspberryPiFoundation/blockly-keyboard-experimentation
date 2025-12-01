@@ -126,14 +126,14 @@ suite('Scrolling into view', function () {
       return blockBounds;
     });
     console.log("block bounds:", blockBounds);
-    const blockPosition = await this.browser.execute(() => {
+    const [blockPosition, blockRelative] = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
         'controls_if',
       )[0] as Blockly.BlockSvg;
-      return block.getRelativeToSurfaceXY();
+      return [block.getRelativeToSurfaceXY(), getRelativeXY(block.getSvgRoot())];
     });
-    console.log("block position:", blockPosition);
+    console.log("block position:", blockPosition, "relative:", blockRelative);
     const [blockParentBounds, blockParentId] = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
@@ -173,3 +173,99 @@ suite('Scrolling into view', function () {
     chai.assert.isTrue(inViewport);
   });
 });
+
+const XY_REGEX = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
+const XY_STYLE_REGEX =
+  /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
+
+function getRelativeXY(element: Element): Coordinate {
+  const xy = new Coordinate(0, 0);
+  // First, check for x and y attributes.
+  // Checking for the existence of x/y properties is faster than getAttribute.
+  // However, x/y contains an SVGAnimatedLength object, so rely on getAttribute
+  // to get the number.
+  const x = (element as any).x && element.getAttribute('x');
+  const y = (element as any).y && element.getAttribute('y');
+  if (x) {
+    xy.x = parseInt(x);
+  }
+  if (y) {
+    xy.y = parseInt(y);
+  }
+  // Second, check for transform="translate(...)" attribute.
+  const transform = element.getAttribute('transform');
+  const r = transform && transform.match(XY_REGEX);
+  if (r) {
+    xy.x += Number(r[1]);
+    if (r[3]) {
+      xy.y += Number(r[3]);
+    }
+  }
+
+  // Then check for style = transform: translate(...) or translate3d(...)
+  const style = element.getAttribute('style');
+  if (style && style.includes('translate')) {
+    const styleComponents = style.match(XY_STYLE_REGEX);
+    if (styleComponents) {
+      xy.x += Number(styleComponents[1]);
+      if (styleComponents[3]) {
+        xy.y += Number(styleComponents[3]);
+      }
+    }
+  }
+  return xy;
+}
+
+class Coordinate {
+  constructor(
+    public x: number,
+    public y: number,
+  ) {}
+
+  clone(): Coordinate {
+    return new Coordinate(this.x, this.y);
+  }
+
+  scale(s: number): Coordinate {
+    this.x *= s;
+    this.y *= s;
+    return this;
+  }
+
+  translate(tx: number, ty: number): Coordinate {
+    this.x += tx;
+    this.y += ty;
+    return this;
+  }
+
+  static equals(a?: Coordinate | null, b?: Coordinate | null): boolean {
+    if (a === b) {
+      return true;
+    }
+    if (!a || !b) {
+      return false;
+    }
+    return a.x === b.x && a.y === b.y;
+  }
+
+  static distance(a: Coordinate, b: Coordinate): number {
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  static magnitude(a: Coordinate): number {
+    return Math.sqrt(a.x * a.x + a.y * a.y);
+  }
+
+  static difference(
+    a: Coordinate | SVGPoint,
+    b: Coordinate | SVGPoint,
+  ): Coordinate {
+    return new Coordinate(a.x - b.x, a.y - b.y);
+  }
+
+  static sum(a: Coordinate | SVGPoint, b: Coordinate | SVGPoint): Coordinate {
+    return new Coordinate(a.x + b.x, a.y + b.y);
+  }
+}
