@@ -126,7 +126,7 @@ suite('Scrolling into view', function () {
       return blockBounds;
     });
     console.log("block bounds:", blockBounds);
-    const [blockPosition, blockRelative] = await this.browser.execute(() => {
+    const [blockPosition, blockRelative, x, y, transform, style] = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
         'controls_if',
@@ -173,9 +173,9 @@ suite('Scrolling into view', function () {
           }
         }
       }
-      return [block.getRelativeToSurfaceXY(), xy];
+      return [block.getRelativeToSurfaceXY(), xy, x, y, transform, style];
     });
-    console.log("block position:", blockPosition, "relative:", blockRelative);
+    console.log("block position:", blockPosition, "relative:", blockRelative, x, y, transform, style);
     const [blockParentBounds, blockParentId] = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
