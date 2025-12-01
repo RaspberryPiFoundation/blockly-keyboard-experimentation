@@ -197,6 +197,13 @@ suite('Scrolling into view', function () {
       return viewport;
     });
     console.log("viewport:", viewport);
+    const matchedBlocks = await this.browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      return workspace.getBlocksByType(
+        'controls_if',
+      ).map((block) => { (block as Blockly.BlockSvg).id });
+    });
+    console.log('matched blocks to controls_if:', matchedBlocks);
     const inViewport = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(
