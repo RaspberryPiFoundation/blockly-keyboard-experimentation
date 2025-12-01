@@ -40,10 +40,11 @@ suite('Scrolling into view', function () {
 
   // Restore original browser window size.
   suiteTeardown(async function () {
-  await this.browser.setWindowSize(
-    this.windowSize.width,
-    this.windowSize.height,
-  );
+    await this.browser.setWindowSize(
+      this.windowSize.width,
+      this.windowSize.height,
+    );
+  });
 
   // Clear the workspace and load start blocks.
   setup(async function () {
