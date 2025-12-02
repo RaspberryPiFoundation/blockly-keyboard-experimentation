@@ -4,7 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {ShortcutRegistry, WorkspaceSvg, utils} from 'blockly/core';
+import {
+  ShortcutRegistry,
+  WorkspaceSvg,
+  BlockSvg,
+  navigateStacks,
+  isSelectable,
+  utils,
+} from 'blockly/core';
 import * as Constants from '../constants';
 
 /**
@@ -16,26 +23,13 @@ export class StackNavigationAction {
 
   install() {
     const preconditionFn = (workspace: WorkspaceSvg) =>
-      !!getCurNodeRoot(workspace);
-
-    function getCurNodeRoot(workspace: WorkspaceSvg) {
-      const cursor = workspace.getCursor();
-      // The fallback case includes workspace comments.
-      return cursor.getSourceBlock()?.getRootBlock() ?? cursor.getCurNode();
-    }
+      !!this.getCurNodeRoot(workspace);
 
     const previousStackShortcut: ShortcutRegistry.KeyboardShortcut = {
       name: Constants.SHORTCUT_NAMES.PREVIOUS_STACK,
       preconditionFn,
       callback: (workspace) => {
-        const curNodeRoot = getCurNodeRoot(workspace);
-        if (!curNodeRoot) return false;
-        const prevRoot = workspace
-          .getNavigator()
-          .getPreviousSibling(curNodeRoot);
-        if (!prevRoot) return false;
-        workspace.getCursor().setCurNode(prevRoot);
-        return true;
+        return this.navigate(workspace, -1);
       },
       keyCodes: [utils.KeyCodes.B],
     };
@@ -44,12 +38,7 @@ export class StackNavigationAction {
       name: Constants.SHORTCUT_NAMES.NEXT_STACK,
       preconditionFn,
       callback: (workspace) => {
-        const curNodeRoot = getCurNodeRoot(workspace);
-        if (!curNodeRoot) return false;
-        const nextRoot = workspace.getNavigator().getNextSibling(curNodeRoot);
-        if (!nextRoot) return false;
-        workspace.getCursor().setCurNode(nextRoot);
-        return true;
+        return this.navigate(workspace, 1);
       },
       keyCodes: [utils.KeyCodes.N],
     };
@@ -58,6 +47,27 @@ export class StackNavigationAction {
     this.stackShortcuts.push(previousStackShortcut);
     ShortcutRegistry.registry.register(nextStackShortcut);
     this.stackShortcuts.push(nextStackShortcut);
+  }
+
+  private getCurNodeRoot(workspace: WorkspaceSvg) {
+    const cursor = workspace.getCursor();
+    // The fallback case includes workspace comments.
+    return cursor.getSourceBlock()?.getRootBlock() ?? cursor.getCurNode();
+  }
+
+  private navigate(workspace: WorkspaceSvg, delta: number) {
+    const curNodeRoot = this.getCurNodeRoot(workspace);
+    if (!curNodeRoot || !isSelectable(curNodeRoot)) {
+      return false;
+    }
+
+    let nextRoot = navigateStacks(curNodeRoot, delta);
+    if (!nextRoot) return false;
+    if (nextRoot instanceof BlockSvg) {
+      nextRoot = nextRoot.getRootBlock();
+    }
+    workspace.getCursor().setCurNode(nextRoot);
+    return true;
   }
 
   /**

@@ -13,7 +13,7 @@ For more planning and timeline information please see our
 
 ## End-user instructions
 
-You can explore the current state of the plugin on the [test page](https://google.github.io/blockly-keyboard-experimentation/).
+You can explore the current state of the plugin on the [test page](https://raspberrypifoundation.github.io/blockly-keyboard-experimentation/).
 
 To use keyboard navigation, click on the workspace or press tab until you
 reach the workspace.

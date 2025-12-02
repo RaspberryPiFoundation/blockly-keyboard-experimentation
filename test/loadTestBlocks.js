@@ -343,7 +343,7 @@ const moreBlocks = {
                         'DO0': {
                           'block': {
                             'type': 'text_print',
-                            'id': 'uSxT~QT8p%D2o)b~)Dki',
+                            'id': 'text_print_2',
                             'inputs': {
                               'TEXT': {
                                 'shadow': {
@@ -388,7 +388,7 @@ const moreBlocks = {
                       'next': {
                         'block': {
                           'type': 'text_print',
-                          'id': '-bTQ2YVSuBS/SYn[C^LX',
+                          'id': 'text_print_3',
                           'inputs': {
                             'TEXT': {
                               'shadow': {

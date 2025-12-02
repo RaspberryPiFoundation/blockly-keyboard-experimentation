@@ -414,24 +414,59 @@ export class Navigation {
       const inputType = movingHasOutput
         ? Blockly.inputs.inputTypes.VALUE
         : Blockly.inputs.inputTypes.STATEMENT;
-      const compatibleInputs = stationaryNode.inputList.filter(
-        (input) => input.type === inputType,
-      );
-      const input = compatibleInputs.length > 0 ? compatibleInputs[0] : null;
-      let connection = input?.connection;
-      if (connection) {
+      const compatibleConnections = stationaryNode.inputList
+        .filter((input) => input.type === inputType)
+        .map((input) => input.connection);
+      for (const connection of compatibleConnections) {
+        let targetConnection: Blockly.Connection | null | undefined =
+          connection;
         if (inputType === Blockly.inputs.inputTypes.STATEMENT) {
-          while (connection.targetBlock()?.nextConnection) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            connection = connection.targetBlock()!.nextConnection!;
+          while (targetConnection?.targetBlock()?.nextConnection) {
+            targetConnection = targetConnection?.targetBlock()?.nextConnection;
           }
         }
-        return connection as Blockly.RenderedConnection;
+
+        if (
+          targetConnection &&
+          movingBlock.workspace.connectionChecker.canConnect(
+            movingHasOutput
+              ? movingBlock.outputConnection
+              : movingBlock.previousConnection,
+            targetConnection,
+            true,
+            // Since we're connecting programmatically, we don't care how
+            // close the blocks are when determining if they can be connected.
+            Infinity,
+          )
+        ) {
+          return targetConnection as Blockly.RenderedConnection;
+        }
       }
 
-      // 2. Connect statement blocks to next connection.
+      // 2. Connect statement blocks to next connection. Only return a next
+      // connection to which the statement block can actually connect; some
+      // may be ineligible because they are e.g. in the middle of an immovable
+      // stack.
       if (stationaryNode.nextConnection && !movingHasOutput) {
-        return stationaryNode.nextConnection;
+        let nextConnection: Blockly.RenderedConnection | null =
+          stationaryNode.nextConnection;
+        while (nextConnection) {
+          if (
+            movingBlock.workspace.connectionChecker.canConnect(
+              movingBlock.previousConnection,
+              nextConnection,
+              true,
+              // Since we're connecting programmatically, we don't care how
+              // close the blocks are when determining if they can be connected.
+              Infinity,
+            )
+          ) {
+            return nextConnection;
+          }
+          nextConnection =
+            nextConnection.getSourceBlock().getNextBlock()?.nextConnection ??
+            null;
+        }
       }
 
       // 3. Output connection. This will wrap around or displace.
