@@ -15,7 +15,7 @@
     "prepublishOnly": "npm login --registry https://wombat-dressing-room.appspot.com",
     "start": "blockly-scripts start",
     "test": "npm run test:mocha && npm run test:wdio",
-    "test:ci": "npm run test:mocha && npm run test:wdio:ci",
+    "test:ci": "npm run test:wdio:ci",
     "test:mocha": "blockly-scripts test",
     "test:wdio": "npm run wdio:clean && npm run wdio:run",
     "test:wdio:ci": "npm run wdio:clean && npm run wdio:run:ci",

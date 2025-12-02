@@ -79,7 +79,7 @@ export async function driverSetup(
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
     options.capabilities['goog:chromeOptions'].args.push(
-      '--headless',
+      '--headless=new',
       '--no-sandbox',
       '--disable-dev-shm-usage',
     );
