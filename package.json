@@ -1,6 +1,6 @@
 {
   "name": "@blockly/keyboard-navigation",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "A plugin for keyboard navigation.",
   "scripts": {
     "audit:fix": "blockly-scripts auditFix",
@@ -54,6 +54,7 @@
   ],
   "devDependencies": {
     "@blockly/dev-scripts": "^4.0.8",
+    "@blockly/dev-tools": "^9.0.3",
     "@blockly/field-colour": "^6.0.2",
     "@eslint/eslintrc": "^2.1.2",
     "@eslint/js": "^8.49.0",
@@ -62,7 +63,7 @@
     "@types/p5": "^1.7.6",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
-    "blockly": "12.3.0",
+    "blockly": "12.3.1",
     "chai": "^5.2.0",
     "eslint": "^8.49.0",
     "eslint-config-google": "^0.14.0",
