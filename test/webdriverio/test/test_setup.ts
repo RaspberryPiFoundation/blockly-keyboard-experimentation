@@ -63,7 +63,7 @@ export async function driverSetup(
       'unhandledPromptBehavior': 'ignore',
       // eslint-disable-next-line @typescript-eslint/naming-convention
       'goog:chromeOptions': {
-        args: ['--allow-file-access-from-files'],
+        args: ['--allow-file-access-from-files', '--user_agent=Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44 (KHTML, like Gecko) JavaFX/8.0 Safari/537.44'],
       },
       // Allows certain BiDi features to work correctly.
       // 'webSocketUrl': true
