@@ -79,7 +79,7 @@ export async function driverSetup(
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
     options.capabilities['goog:chromeOptions'].args.push(
-      '--headless=new',
+      '--headless',
       '--no-sandbox',
       '--disable-dev-shm-usage',
     );
@@ -204,6 +204,13 @@ export async function getSelectedBlockId(browser: WebdriverIO.Browser) {
   });
 }
 
+export async function idle(browser: WebdriverIO.Browser) {
+  await browser.execute(() => {
+    (Blockly.getMainWorkspace() as Blockly.WorkspaceSvg).render();
+  });
+  await browser.pause(PAUSE_TIME);
+}
+
 /**
  * Clicks in the workspace to focus it.
  *
@@ -214,7 +221,7 @@ export async function focusWorkspace(browser: WebdriverIO.Browser) {
     '#blocklyDiv > div > svg.blocklySvg > g',
   );
   await workspaceElement.click({x: 100});
-  await browser.pause(PAUSE_TIME);
+  await idle(browser);
 }
 
 /**
@@ -303,7 +310,7 @@ export async function focusOnBlock(
     if (!block) throw new Error(`No block found with ID: ${blockId}.`);
     Blockly.getFocusManager().focusNode(block);
   }, blockId);
-  await browser.pause(PAUSE_TIME);
+  await idle(browser);
 }
 
 /**
@@ -326,7 +333,7 @@ export async function focusOnWorkspaceComment(
     }
     Blockly.getFocusManager().focusNode(comment);
   }, commentId);
-  await browser.pause(PAUSE_TIME);
+  await idle(browser);
 }
 
 /**
@@ -358,7 +365,7 @@ export async function focusOnBlockField(
     blockId,
     fieldName,
   );
-  await browser.pause(PAUSE_TIME);
+  await idle(browser);
 }
 
 /**
@@ -491,7 +498,7 @@ export async function tabNavigateToWorkspace(
   // there's no straightforward way to do that; see
   // https://stackoverflow.com/q/51518855/4969945
   await browser.execute(() => document.getElementById('focusableDiv')?.focus());
-  await browser.pause(PAUSE_TIME);
+  await idle(browser);
   // Navigate to workspace.
   if (hasToolbox) await tabNavigateForward(browser);
   if (hasFlyout) await tabNavigateForward(browser);
@@ -591,7 +598,7 @@ export async function sendKeyAndWait(
   } else {
     for (let i = 0; i < times; i++) {
       await browser.keys(keys);
-      await browser.pause(PAUSE_TIME);
+      await idle(browser);
     }
   }
 }
@@ -737,13 +744,13 @@ export async function clickBlock(
     blockId,
     findableId,
   );
-  await browser.pause(PAUSE_TIME);
+  await idle(browser);
 
   // In the test context, get the WebdriverIO Element that we've identified.
   const elem = await browser.$(`#${findableId}`);
 
   await elem.click(clickOptions);
-  await browser.pause(PAUSE_TIME);
+  await idle(browser);
 
   // In the browser context, remove the ID.
   await browser.execute((elemId) => {
@@ -763,5 +770,5 @@ export async function rightClickOnFlyoutBlockType(
 ) {
   const elem = await browser.$(`.blocklyFlyout .${blockType}`);
   await elem.click({button: 'right'});
-  await browser.pause(PAUSE_TIME);
+  await idle(browser);
 }
