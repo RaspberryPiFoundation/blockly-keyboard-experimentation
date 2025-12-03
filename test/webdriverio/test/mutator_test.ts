@@ -18,6 +18,7 @@ import {
   keyRight,
   keyDown,
   checkForFailures,
+  idle,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -33,7 +34,7 @@ suite('Mutator navigation', function () {
     );
     this.openMutator = async () => {
       await focusOnBlock(this.browser, 'controls_if_1');
-      await this.browser.pause(PAUSE_TIME);
+      await idle(this.browser);
       // Navigate to the mutator icon
       await keyRight(this.browser);
       // Activate the icon
@@ -101,7 +102,7 @@ suite('Mutator navigation', function () {
     await sendKeyAndWait(this.browser, 't');
     // Navigate down to the second block in the flyout
     await keyDown(this.browser);
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
     // Hit enter to enter insert mode
     await sendKeyAndWait(this.browser, Key.Enter);
     // Hit enter again to lock it into place on the connection

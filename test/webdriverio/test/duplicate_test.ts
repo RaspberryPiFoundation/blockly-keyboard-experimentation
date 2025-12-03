@@ -16,6 +16,7 @@ import {
   testSetup,
   sendKeyAndWait,
   checkForFailures,
+  idle,
 } from './test_setup.js';
 
 suite('Duplicate test', function () {
@@ -25,7 +26,7 @@ suite('Duplicate test', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
   });
 
   teardown(async function() {
@@ -66,7 +67,7 @@ suite('Duplicate test', function () {
         (workspace as Blockly.WorkspaceSvg).getTopComments()[0],
       );
     }, text);
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
 
     // Duplicate.
     await sendKeyAndWait(this.browser, 'd');

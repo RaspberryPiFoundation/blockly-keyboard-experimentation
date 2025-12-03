@@ -17,6 +17,7 @@ import {
   testFileLocations,
   testSetup,
   checkForFailures,
+  idle,
 } from './test_setup.js';
 
 suite('Scrolling into view', function () {
@@ -35,7 +36,7 @@ suite('Scrolling into view', function () {
     // });
     this.windowSize = await this.browser.getWindowSize();
     await this.browser.setWindowSize(800, 600);
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
   });
 
   // Restore original browser window size.
@@ -87,7 +88,7 @@ suite('Scrolling into view', function () {
       );
     });
     // Pause to allow scrolling to stabilize before proceeding.
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
     const scrollPosition2 = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       return [workspace.scrollX, workspace.scrollY];
@@ -116,7 +117,7 @@ suite('Scrolling into view', function () {
     console.log("workspace scroll position after insert:", scrollPosition3);
 
     // Assert new block has been scrolled into the viewport.
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
     // await this.browser.saveScreenshot(`failures/extra_snapshot_for_verification.png`);
     const blockBounds = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;

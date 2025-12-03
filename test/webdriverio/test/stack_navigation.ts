@@ -14,13 +14,14 @@ import {
   testSetup,
   sendKeyAndWait,
   checkForFailures,
+  idle,
 } from './test_setup.js';
 
 suite('Stack navigation', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     this.browser = await testSetup(testFileLocations.COMMENTS, this.timeout());
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
   });
 
   teardown(async function() {

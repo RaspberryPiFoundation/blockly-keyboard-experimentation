@@ -17,6 +17,7 @@ import {
   keyDown,
   contextMenuItems,
   checkForFailures,
+  idle,
 } from './test_setup.js';
 
 suite.skip('Move start tests', function () {
@@ -30,7 +31,7 @@ suite.skip('Move start tests', function () {
       testFileLocations.MOVE_START_TEST_BLOCKS,
       this.timeout(),
     );
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
   });
 
   teardown(async function() {
@@ -196,7 +197,7 @@ suite('Statement move tests', function () {
       testFileLocations.MOVE_STATEMENT_TEST_BLOCKS,
       this.timeout(),
     );
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
   });
 
   teardown(async function() {
@@ -483,7 +484,7 @@ suite(`Value expression move tests`, function () {
           ),
           this.timeout(),
         );
-        await this.browser.pause(PAUSE_TIME);
+        await idle(this.browser);
       });
 
       teardown(async function() {

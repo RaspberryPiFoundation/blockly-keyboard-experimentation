@@ -15,6 +15,7 @@ import {
   testFileLocations,
   testSetup,
   checkForFailures,
+  idle,
 } from './test_setup.js';
 import * as chai from 'chai';
 
@@ -25,7 +26,7 @@ suite('Styling test', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
   });
 
   teardown(async function() {

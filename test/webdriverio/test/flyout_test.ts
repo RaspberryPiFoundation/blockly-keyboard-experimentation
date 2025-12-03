@@ -21,6 +21,7 @@ import {
   getCurrentFocusedBlockId,
   tabNavigateToToolbox,
   checkForFailures,
+  idle,
 } from './test_setup.js';
 
 suite('Toolbox and flyout test', function () {
@@ -30,7 +31,7 @@ suite('Toolbox and flyout test', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
   });
 
   teardown(async function() {
@@ -149,7 +150,7 @@ suite('Toolbox and flyout test', function () {
 
   test('Tabbing to the workspace should close the flyout', async function () {
     await tabNavigateToWorkspace(this.browser);
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
 
     // The flyout should be closed since it lost focus.
     const flyoutIsOpen = await checkIfFlyoutIsOpen(this.browser);
@@ -297,7 +298,7 @@ suite('Toolbox and flyout test', function () {
     });
     test('callbackkey is activated with enter', async function () {
       await tabNavigateToToolbox(this.browser);
-      await this.browser.pause(PAUSE_TIME);
+      await idle(this.browser);
 
       // First thing in the toolbox is the first button
       // Press Enter to activate it.
@@ -310,7 +311,7 @@ suite('Toolbox and flyout test', function () {
 
     test('callbackKey is activated with enter', async function () {
       await tabNavigateToToolbox(this.browser);
-      await this.browser.pause(PAUSE_TIME);
+      await idle(this.browser);
 
       // Navigate to second button.
       // Press Enter to activate it.

@@ -23,6 +23,7 @@ import {
   keyUp,
   tabNavigateToToolbox,
   checkForFailures,
+  idle,
 } from './test_setup.js';
 
 suite('Insert test', function () {
@@ -32,7 +33,7 @@ suite('Insert test', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
   });
 
   teardown(async function() {
@@ -150,7 +151,7 @@ suite('Insert test with more blocks', function () {
       testFileLocations.MORE_BLOCKS,
       this.timeout(),
     );
-    await this.browser.pause(PAUSE_TIME);
+    await idle(this.browser);
   });
 
   teardown(async function() {
