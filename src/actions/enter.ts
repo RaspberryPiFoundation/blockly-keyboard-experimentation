@@ -350,7 +350,7 @@ export class EnterAction {
    * @returns True if we showed the editor, false otherwise.
    */
   private tryShowFullBlockFieldEditor(block: Block): boolean {
-    if (block.isSimpleReporter()) {
+    if (block.isSimpleReporter(true, true)) {
       for (const input of block.inputList) {
         for (const field of input.fieldRow) {
           if (field.isClickable() && field.isFullBlockField()) {
