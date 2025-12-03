@@ -42,7 +42,9 @@ let driver: webdriverio.Browser | null = null;
  * the browser.wait* functions if you need your test to wait for
  * something to happen after sending input.
  */
-export const PAUSE_TIME = 0;
+export var PAUSE_TIME = 1000;
+
+export function setPauseTime(time: number) { PAUSE_TIME = time; }
 
 /**
  * Start up WebdriverIO and load the test page. This should only be
@@ -595,6 +597,7 @@ export async function sendKeyAndWait(
     // Send all keys in one call if no pauses needed.
     keys = Array(times).fill(keys).flat();
     await browser.keys(keys);
+    await idle(browser);
   } else {
     for (let i = 0; i < times; i++) {
       await browser.keys(keys);

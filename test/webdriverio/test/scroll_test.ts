@@ -18,6 +18,7 @@ import {
   testSetup,
   checkForFailures,
   idle,
+  setPauseTime,
 } from './test_setup.js';
 
 suite('Scrolling into view', function () {
@@ -56,10 +57,11 @@ suite('Scrolling into view', function () {
     await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
-  test('Insert scrolls new block into view', async function () {
+  test.only('Insert scrolls new block into view', async function () {
     // Increase timeout to 10s for this longer test.
     this.timeout(PAUSE_TIME ? 0 : 10000);
 
+    setPauseTime(0);
     await tabNavigateToWorkspace(this.browser);
 
     // Separate the two top-level blocks by moving p5_draw_1 further down.
@@ -67,6 +69,7 @@ suite('Scrolling into view', function () {
     await sendKeyAndWait(this.browser, 'm');
     await sendKeyAndWait(this.browser, [Key.Alt, Key.ArrowDown], 25);
     await sendKeyAndWait(this.browser, Key.Enter);
+    setPauseTime(1000);
     const movedBlockBounds = await this.browser.execute(() => {
       const block = Blockly.getFocusManager().getFocusedNode() as Blockly.BlockSvg;
       const blockBounds = block.getBoundingRectangleWithoutChildren();
