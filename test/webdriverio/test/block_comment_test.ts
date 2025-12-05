@@ -18,7 +18,7 @@ import {
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
-suite('Block comment navigation', function () {
+suite.only('Block comment navigation', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 

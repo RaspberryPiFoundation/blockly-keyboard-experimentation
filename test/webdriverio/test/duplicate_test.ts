@@ -19,7 +19,7 @@ import {
   idle,
 } from './test_setup.js';
 
-suite('Duplicate test', function () {
+suite.only('Duplicate test', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 

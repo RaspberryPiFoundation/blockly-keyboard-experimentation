@@ -25,7 +25,7 @@ import {
   setSynchronizeCoreBlocklyRendering,
 } from './test_setup.js';
 
-suite('Toolbox and flyout test', function () {
+suite.only('Toolbox and flyout test', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 

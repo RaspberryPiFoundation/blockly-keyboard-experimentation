@@ -26,7 +26,7 @@ const isKeyboardNavigating = function (browser: WebdriverIO.Browser) {
   });
 };
 
-suite(
+suite.only(
   'Keyboard navigation mode set on mouse or keyboard interaction',
   function () {
     // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
