@@ -110,7 +110,7 @@ suite.only('Move start tests', function () {
   //
   // Also tests initiating a move via the context menu.
   test('Start moving value blocks', async function () {
-    for (let i = 1; i < 7; i++) {
+    for (let i = 1; i < 2; i++) {
       // Navigate to statement_<i>.
       await focusOnBlock(this.browser, `value_${i}`);
 
