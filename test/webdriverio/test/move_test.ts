@@ -20,7 +20,7 @@ import {
   idle,
 } from './test_setup.js';
 
-suite('Move start tests', function () {
+suite.only('Move start tests', function () {
   // Increase timeout to 10s for this longer test (but disable
   // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
   this.timeout(PAUSE_TIME ? 0 : 10000);
@@ -109,7 +109,7 @@ suite('Move start tests', function () {
   // a stack heal (really: unary operator chain heal) will NOT occur.
   //
   // Also tests initiating a move via the context menu.
-  test.only('Start moving value blocks', async function () {
+  test('Start moving value blocks', async function () {
     for (let i = 1; i < 7; i++) {
       // Navigate to statement_<i>.
       await focusOnBlock(this.browser, `value_${i}`);
@@ -186,7 +186,7 @@ suite('Move start tests', function () {
   });
 });
 
-suite('Statement move tests', function () {
+suite.only('Statement move tests', function () {
   // Increase timeout to 10s for this longer test (but disable
   // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
   this.timeout(PAUSE_TIME ? 0 : 10000);
@@ -371,7 +371,7 @@ suite('Statement move tests', function () {
   });
 });
 
-suite(`Value expression move tests`, function () {
+suite.only(`Value expression move tests`, function () {
   // Increase timeout to 10s for this longer test (but disable
   // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
   this.timeout(PAUSE_TIME ? 0 : 10000);
