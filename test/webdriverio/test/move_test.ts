@@ -20,7 +20,7 @@ import {
   idle,
 } from './test_setup.js';
 
-suite.skip('Move start tests', function () {
+suite('Move start tests', function () {
   // Increase timeout to 10s for this longer test (but disable
   // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
   this.timeout(PAUSE_TIME ? 0 : 10000);
