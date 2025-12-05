@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   webdriverio_tests:
-    name: WebdriverIO tests (against add-screen-reader-support-experimental core develop)
+    name: WebdriverIO tests (against add-screen-reader-support-experimental core)
     timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
