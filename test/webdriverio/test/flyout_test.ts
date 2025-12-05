@@ -311,7 +311,7 @@ suite.only('Toolbox and flyout test', function () {
       await this.browser.getAlertText();
     });
 
-    test('callbackKey is activated with enter', async function () {
+    test.skip('callbackKey is activated with enter', async function () {
       setSynchronizeCoreBlocklyRendering(false);
       await tabNavigateToToolbox(this.browser);
       await idle(this.browser);

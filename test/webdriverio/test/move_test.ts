@@ -45,7 +45,7 @@ suite.only('Move start tests', function () {
   // heal will occur.
   //
   // Also tests initating a move using the shortcut key.
-  test.only('Start moving statement blocks', async function () {
+  test('Start moving statement blocks', async function () {
     for (let i = 1; i < 7; i++) {
       // Navigate to statement_<i>.
       await focusOnBlock(this.browser, `statement_${i}`);
