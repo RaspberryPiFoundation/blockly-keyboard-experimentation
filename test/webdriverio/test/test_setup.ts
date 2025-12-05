@@ -42,7 +42,7 @@ let driver: webdriverio.Browser | null = null;
  * the browser.wait* functions if you need your test to wait for
  * something to happen after sending input.
  */
-export var PAUSE_TIME = 1000;
+export var PAUSE_TIME = 0;
 
 export function setPauseTime(time: number) { PAUSE_TIME = time; }
 
@@ -208,7 +208,15 @@ export async function getSelectedBlockId(browser: WebdriverIO.Browser) {
 
 export async function idle(browser: WebdriverIO.Browser) {
   await browser.execute(() => {
-    (Blockly.getMainWorkspace() as Blockly.WorkspaceSvg).render();
+    const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+    // Queue re-rendering all blocks.
+    workspace.render();
+    // Flush the rendering queue (this is a slight hack to leverage
+    // BlockSvg.render() directly blocking on rendering finishing).
+    const blocks = workspace.getTopBlocks();
+    if (blocks.length > 0) {
+      blocks[0].render();
+    }
   });
   await browser.pause(PAUSE_TIME);
 }
