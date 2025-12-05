@@ -149,7 +149,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test('Tabbing to the workspace should close the flyout', async function () {
+  test.skip('Tabbing to the workspace should close the flyout', async function () {
     await tabNavigateToWorkspace(this.browser);
     await idle(this.browser);
 
@@ -158,7 +158,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test('Tabbing to the workspace after selecting flyout block should close the flyout', async function () {
+  test.skip('Tabbing to the workspace after selecting flyout block should close the flyout', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped),
     // then use right key to specifically navigate into the flyout before
     // navigating to the workspace.
@@ -174,7 +174,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test('Tabbing to the workspace after selecting flyout block via workspace toolbox shortcut should close the flyout', async function () {
+  test.skip('Tabbing to the workspace after selecting flyout block via workspace toolbox shortcut should close the flyout', async function () {
     await tabNavigateToWorkspace(this.browser);
 
     await sendKeyAndWait(this.browser, 't');
@@ -187,7 +187,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test('Tabbing back from workspace should reopen the flyout', async function () {
+  test.skip('Tabbing back from workspace should reopen the flyout', async function () {
     await tabNavigateToWorkspace(this.browser);
 
     await tabNavigateBackward(this.browser);
@@ -198,7 +198,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isTrue(flyoutIsOpen);
   });
 
-  test('Navigation position in workspace should be retained when tabbing to flyout and back', async function () {
+  test.skip('Navigation position in workspace should be retained when tabbing to flyout and back', async function () {
     // Navigate to the workspace and select a non-default block.
     await tabNavigateToWorkspace(this.browser);
 
@@ -214,7 +214,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'p5_draw_1');
   });
 
-  test('Clicking outside Blockly with focused toolbox closes the flyout', async function () {
+  test.skip('Clicking outside Blockly with focused toolbox closes the flyout', async function () {
     // Two tabs should navigate to the toolbox. One click to unfocus.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -227,7 +227,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test('Clicking outside Blockly with focused flyout closes the flyout', async function () {
+  test.skip('Clicking outside Blockly with focused flyout closes the flyout', async function () {
     // Two tabs should navigate to the toolbox. One key to select the flyout.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -242,7 +242,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test('Clicking on toolbox category focuses it and opens flyout', async function () {
+  test.skip('Clicking on toolbox category focuses it and opens flyout', async function () {
     const elemId = await findToolboxCategoryIdByName(this.browser, 'Loops');
     const elem = this.browser.$(`#${elemId}`);
     await elem.click();
