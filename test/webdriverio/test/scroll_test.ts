@@ -57,7 +57,7 @@ suite('Scrolling into view', function () {
     await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
-  test.only('Insert scrolls new block into view', async function () {
+  test('Insert scrolls new block into view', async function () {
     // Increase timeout to 10s for this longer test.
     this.timeout(PAUSE_TIME ? 0 : 10000);
 
