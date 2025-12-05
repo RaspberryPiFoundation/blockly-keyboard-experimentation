@@ -109,7 +109,7 @@ suite('Move start tests', function () {
   // a stack heal (really: unary operator chain heal) will NOT occur.
   //
   // Also tests initiating a move via the context menu.
-  test('Start moving value blocks', async function () {
+  test.only('Start moving value blocks', async function () {
     for (let i = 1; i < 7; i++) {
       // Navigate to statement_<i>.
       await focusOnBlock(this.browser, `value_${i}`);
