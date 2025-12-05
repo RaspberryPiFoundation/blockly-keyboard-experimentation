@@ -26,7 +26,7 @@ import {
   idle,
 } from './test_setup.js';
 
-suite.only('Insert test', function () {
+suite('Insert test', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 
@@ -141,7 +141,7 @@ suite.only('Insert test', function () {
   });
 });
 
-suite.only('Insert test with more blocks', function () {
+suite('Insert test with more blocks', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 
