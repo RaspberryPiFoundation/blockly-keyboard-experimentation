@@ -88,7 +88,7 @@ const workspaceActionsViaKeyboard = [
   {'disabled': true, 'text': isDarwin ? 'Paste ⌘ V' : 'Paste Ctrl + V'},
 ];
 
-suite.only('Menus test', function () {
+suite('Menus test', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 

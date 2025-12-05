@@ -27,7 +27,7 @@ import {
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
-suite.only('Keyboard navigation on Blocks', function () {
+suite('Keyboard navigation on Blocks', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 
@@ -229,7 +229,7 @@ suite.only('Keyboard navigation on Blocks', function () {
   });
 });
 
-suite.only('Keyboard navigation on Fields', function () {
+suite('Keyboard navigation on Fields', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 
