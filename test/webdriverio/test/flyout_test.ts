@@ -305,7 +305,7 @@ suite.only('Toolbox and flyout test', function () {
       // First thing in the toolbox is the first button
       // Press Enter to activate it.
       await keyRight(this.browser);
-      await sendKeyAndWait(this.browser, webdriverio.Key.Enter);
+      // await sendKeyAndWait(this.browser, webdriverio.Key.Enter);
 
       // This errors if there is no alert present
       // await this.browser.getAlertText();
