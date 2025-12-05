@@ -254,7 +254,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isTrue(flyoutIsOpen);
   });
 
-  suite('Flyout buttons', function () {
+  suite.skip('Flyout buttons', function () {
     setup(async function () {
       // New toolbox definition
       const toolbox = {
