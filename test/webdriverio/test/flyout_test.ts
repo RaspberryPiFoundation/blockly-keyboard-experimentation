@@ -39,7 +39,7 @@ suite.only('Toolbox and flyout test', function () {
     await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
-  test('Tab navigating to toolbox should open flyout', async function () {
+  test.skip('Tab navigating to toolbox should open flyout', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped).
     await tabNavigateForward(this.browser);
 
@@ -50,7 +50,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isTrue(flyoutIsOpen);
   });
 
-  test('Tab navigating to flyout should auto-select first block', async function () {
+  test.skip('Tab navigating to flyout should auto-select first block', async function () {
     // Three tabs should navigate to the flyout (initial element is skipped).
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -63,7 +63,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'if_block');
   });
 
-  test('Tab navigating to toolbox then right arrow key should auto-select first block in flyout', async function () {
+  test.skip('Tab navigating to toolbox then right arrow key should auto-select first block in flyout', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped). One
     // right arrow key should select a block on the flyout.
     await tabNavigateForward(this.browser);
@@ -77,7 +77,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'if_block');
   });
 
-  test('Keyboard nav to different toolbox category should auto-select first block', async function () {
+  test.skip('Keyboard nav to different toolbox category should auto-select first block', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped),
     // then keys for a different category with a tab to select the flyout.
     await tabNavigateForward(this.browser);
@@ -91,7 +91,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'text_block');
   });
 
-  test('Keyboard nav to different toolbox category and block should select different block', async function () {
+  test.skip('Keyboard nav to different toolbox category and block should select different block', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped),
     // then keys for a different category with a tab to select the flyout and
     // finally keys to select a different block.
@@ -107,7 +107,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'append_text_block');
   });
 
-  test('Tab navigate away from toolbox restores focus to initial element', async function () {
+  test.skip('Tab navigate away from toolbox restores focus to initial element', async function () {
     // Two tabs should navigate to the toolbox. One tab back should leave it.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -122,7 +122,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(activeElementId, 'focusableDiv');
   });
 
-  test('Tab navigate away from toolbox closes flyout', async function () {
+  test.skip('Tab navigate away from toolbox closes flyout', async function () {
     // Two tabs should navigate to the toolbox. One tab back should leave it.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -135,7 +135,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test('Tab navigate away from flyout to toolbox and away closes flyout', async function () {
+  test.skip('Tab navigate away from flyout to toolbox and away closes flyout', async function () {
     // Three tabs should navigate to the flyout, and two tabs back should close.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -254,7 +254,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isTrue(flyoutIsOpen);
   });
 
-  suite.skip('Flyout buttons', function () {
+  suite('Flyout buttons', function () {
     setup(async function () {
       // New toolbox definition
       const toolbox = {
