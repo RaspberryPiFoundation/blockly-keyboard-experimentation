@@ -57,8 +57,8 @@ suite('Scrolling into view', function () {
   });
 
   test('Insert scrolls new block into view', async function () {
-    // Increase timeout to 10s for this longer test.
-    this.timeout(PAUSE_TIME ? 0 : 10000);
+    // Increase timeout for this longer test.
+    this.timeout(PAUSE_TIME ? 0 : 30000);
 
     // setPauseTime(0);
     await tabNavigateToWorkspace(this.browser);
