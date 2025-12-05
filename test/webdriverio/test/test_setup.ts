@@ -42,9 +42,7 @@ let driver: webdriverio.Browser | null = null;
  * the browser.wait* functions if you need your test to wait for
  * something to happen after sending input.
  */
-export var PAUSE_TIME = 0;
-
-export function setPauseTime(time: number) { PAUSE_TIME = time; }
+export const PAUSE_TIME = 0;
 
 /**
  * Start up WebdriverIO and load the test page. This should only be
@@ -65,10 +63,8 @@ export async function driverSetup(
       'unhandledPromptBehavior': 'ignore',
       // eslint-disable-next-line @typescript-eslint/naming-convention
       'goog:chromeOptions': {
-        args: ['--allow-file-access-from-files', '--user_agent=Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44 (KHTML, like Gecko) JavaFX/8.0 Safari/537.44'],
+        args: ['--allow-file-access-from-files'],
       },
-      // Allows certain BiDi features to work correctly.
-      // 'webSocketUrl': true
       // We aren't (yet) using any BiDi features, and BiDi is sensitive to
       // mismatches between Chrome version and Chromedriver version.
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -207,6 +203,11 @@ export async function getSelectedBlockId(browser: WebdriverIO.Browser) {
 }
 
 export async function idle(browser: WebdriverIO.Browser) {
+  // First, attempt to synchronize on rendering to ensure that Blockly is fully
+  // rendered before pausing for browser execution. This works around potential
+  // bugs when running in headless mode that can cause requestAnimationFrame to
+  // not call back (and cause state inconsistencies in block positions and sizes
+  // per #770).
   await browser.execute(() => {
     const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
     // Queue re-rendering all blocks.

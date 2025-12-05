@@ -18,7 +18,6 @@ import {
   testSetup,
   checkForFailures,
   idle,
-  setPauseTime,
 } from './test_setup.js';
 
 suite('Scrolling into view', function () {
