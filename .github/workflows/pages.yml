@@ -33,7 +33,7 @@ jobs:
         with:
           path: blockly
           repository: google/blockly
-          ref: develop
+          ref: main
 
       - name: Checkout add-screen-reader-support-experimental core Blockly
         uses: actions/checkout@v4
