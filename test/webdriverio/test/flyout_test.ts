@@ -22,6 +22,7 @@ import {
   tabNavigateToToolbox,
   checkForFailures,
   idle,
+  setSynchronizeCoreBlocklyRendering,
 } from './test_setup.js';
 
 suite('Toolbox and flyout test', function () {
@@ -297,6 +298,7 @@ suite('Toolbox and flyout test', function () {
       }
     });
     test('callbackkey is activated with enter', async function () {
+      setSynchronizeCoreBlocklyRendering(false);
       await tabNavigateToToolbox(this.browser);
       await idle(this.browser);
 
@@ -310,6 +312,7 @@ suite('Toolbox and flyout test', function () {
     });
 
     test('callbackKey is activated with enter', async function () {
+      setSynchronizeCoreBlocklyRendering(false);
       await tabNavigateToToolbox(this.browser);
       await idle(this.browser);
 

@@ -44,6 +44,8 @@ let driver: webdriverio.Browser | null = null;
  */
 export const PAUSE_TIME = 0;
 
+var synchronizeCoreBlocklyRendering: boolean = true;
+
 /**
  * Start up WebdriverIO and load the test page. This should only be
  * done once, to avoid constantly popping browser windows open and
@@ -119,6 +121,9 @@ export async function testSetup(
   playgroundUrl: string,
   wdioWaitTimeoutMs: number,
 ): Promise<webdriverio.Browser> {
+  // Reset back to default state between tests.
+  synchronizeCoreBlocklyRendering = true;
+
   if (!driver) {
     driver = await driverSetup(wdioWaitTimeoutMs);
   }
@@ -202,24 +207,61 @@ export async function getSelectedBlockId(browser: WebdriverIO.Browser) {
   });
 }
 
-export async function idle(browser: WebdriverIO.Browser) {
-  // First, attempt to synchronize on rendering to ensure that Blockly is fully
-  // rendered before pausing for browser execution. This works around potential
-  // bugs when running in headless mode that can cause requestAnimationFrame to
-  // not call back (and cause state inconsistencies in block positions and sizes
-  // per #770).
-  await browser.execute(() => {
-    const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
-    // Queue re-rendering all blocks.
-    workspace.render();
-    // Flush the rendering queue (this is a slight hack to leverage
-    // BlockSvg.render() directly blocking on rendering finishing).
-    const blocks = workspace.getTopBlocks();
-    if (blocks.length > 0) {
-      blocks[0].render();
-    }
-  });
+/**
+ * Idles the browser for PAUSE_TIME, also possibly synchronizing rendering in
+ * core Blockly.
+ *
+ * This generally should always be preferred over calling browser.pause()
+ * directly.
+ *
+ * See setSynchronizeCoreBlocklyRendering() for additional details on
+ * configuring how this function behaves.
+ *
+ * @param browser The active WebdriverIO Browser object.
+ */
+export async function idle(browser: WebdriverIO.Browser, synchronizeRendering: boolean = true) {
+  if (synchronizeCoreBlocklyRendering) {
+    // First, attempt to synchronize on rendering to ensure that Blockly is
+    // fully rendered before pausing for browser execution. This works around
+    // potential bugs when running in headless mode that can cause
+    // requestAnimationFrame to not call back (and cause state inconsistencies
+    // in block positions and sizes per #770).
+    await browser.execute(() => {
+      const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
+      // Queue re-rendering all blocks.
+      workspace.render();
+      // Flush the rendering queue (this is a slight hack to leverage
+      // BlockSvg.render() directly blocking on rendering finishing).
+      const blocks = workspace.getTopBlocks();
+      if (blocks.length > 0) {
+        blocks[0].render();
+      }
+    });
+  }
   await browser.pause(PAUSE_TIME);
+}
+
+/**
+ * Configures whether to synchronize core Blockly's rendering system when trying
+ * to idle tests to wait for operations to complete.
+ *
+ * This is enabled by default and changes the behavior of idle() which is used
+ * both directly in tests and indirectly via the many test helpers in this file.
+ *
+ * Synchronization is useful because it ensures Blockly is fully rendered and
+ * stable before proceeding with the test (which can sometimes be desynchronized
+ * if the headless test environment drops a request for animation rendering
+ * frame which has been observed in CI environments).
+ *
+ * Synchronization must be disabled in certain tests, particularly those that
+ * can trigger alert dialogs since, when open, these will always cause any
+ * browser.execute() calls to fail the test (and rendering synchronization
+ * relies on this WebdriverIO mechanism).
+ *
+ * @param enableSynchronization
+ */
+export async function setSynchronizeCoreBlocklyRendering(enableSynchronization: boolean) {
+  synchronizeCoreBlocklyRendering = enableSynchronization;
 }
 
 /**
