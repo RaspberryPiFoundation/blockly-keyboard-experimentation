@@ -126,6 +126,11 @@ export async function testSetup(
 
   if (!driver) {
     driver = await driverSetup(wdioWaitTimeoutMs);
+  } else if (process.env.CI) {
+    // If running in CI force a session reload to ensure no browser state can
+    // leak across test suites (since this can sometimes cause complex combined
+    // failures in CI).
+    await driver.reloadSession();
   }
   await driver.url(playgroundUrl);
   // Wait for the workspace to exist and be rendered.
