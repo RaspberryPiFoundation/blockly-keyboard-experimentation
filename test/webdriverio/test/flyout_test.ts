@@ -25,7 +25,7 @@ import {
   setSynchronizeCoreBlocklyRendering,
 } from './test_setup.js';
 
-suite.only('Toolbox and flyout test', function () {
+suite('Toolbox and flyout test', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 
@@ -39,7 +39,7 @@ suite.only('Toolbox and flyout test', function () {
     await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
   });
 
-  test.skip('Tab navigating to toolbox should open flyout', async function () {
+  test('Tab navigating to toolbox should open flyout', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped).
     await tabNavigateForward(this.browser);
 
@@ -50,7 +50,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isTrue(flyoutIsOpen);
   });
 
-  test.skip('Tab navigating to flyout should auto-select first block', async function () {
+  test('Tab navigating to flyout should auto-select first block', async function () {
     // Three tabs should navigate to the flyout (initial element is skipped).
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -63,7 +63,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'if_block');
   });
 
-  test.skip('Tab navigating to toolbox then right arrow key should auto-select first block in flyout', async function () {
+  test('Tab navigating to toolbox then right arrow key should auto-select first block in flyout', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped). One
     // right arrow key should select a block on the flyout.
     await tabNavigateForward(this.browser);
@@ -77,7 +77,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'if_block');
   });
 
-  test.skip('Keyboard nav to different toolbox category should auto-select first block', async function () {
+  test('Keyboard nav to different toolbox category should auto-select first block', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped),
     // then keys for a different category with a tab to select the flyout.
     await tabNavigateForward(this.browser);
@@ -91,7 +91,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'text_block');
   });
 
-  test.skip('Keyboard nav to different toolbox category and block should select different block', async function () {
+  test('Keyboard nav to different toolbox category and block should select different block', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped),
     // then keys for a different category with a tab to select the flyout and
     // finally keys to select a different block.
@@ -107,7 +107,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'append_text_block');
   });
 
-  test.skip('Tab navigate away from toolbox restores focus to initial element', async function () {
+  test('Tab navigate away from toolbox restores focus to initial element', async function () {
     // Two tabs should navigate to the toolbox. One tab back should leave it.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -122,7 +122,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(activeElementId, 'focusableDiv');
   });
 
-  test.skip('Tab navigate away from toolbox closes flyout', async function () {
+  test('Tab navigate away from toolbox closes flyout', async function () {
     // Two tabs should navigate to the toolbox. One tab back should leave it.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -135,7 +135,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test.skip('Tab navigate away from flyout to toolbox and away closes flyout', async function () {
+  test('Tab navigate away from flyout to toolbox and away closes flyout', async function () {
     // Three tabs should navigate to the flyout, and two tabs back should close.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -149,7 +149,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test.skip('Tabbing to the workspace should close the flyout', async function () {
+  test('Tabbing to the workspace should close the flyout', async function () {
     await tabNavigateToWorkspace(this.browser);
     await idle(this.browser);
 
@@ -158,7 +158,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test.skip('Tabbing to the workspace after selecting flyout block should close the flyout', async function () {
+  test('Tabbing to the workspace after selecting flyout block should close the flyout', async function () {
     // Two tabs should navigate to the toolbox (initial element is skipped),
     // then use right key to specifically navigate into the flyout before
     // navigating to the workspace.
@@ -174,7 +174,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test.skip('Tabbing to the workspace after selecting flyout block via workspace toolbox shortcut should close the flyout', async function () {
+  test('Tabbing to the workspace after selecting flyout block via workspace toolbox shortcut should close the flyout', async function () {
     await tabNavigateToWorkspace(this.browser);
 
     await sendKeyAndWait(this.browser, 't');
@@ -187,7 +187,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test.skip('Tabbing back from workspace should reopen the flyout', async function () {
+  test('Tabbing back from workspace should reopen the flyout', async function () {
     await tabNavigateToWorkspace(this.browser);
 
     await tabNavigateBackward(this.browser);
@@ -198,7 +198,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isTrue(flyoutIsOpen);
   });
 
-  test.skip('Navigation position in workspace should be retained when tabbing to flyout and back', async function () {
+  test('Navigation position in workspace should be retained when tabbing to flyout and back', async function () {
     // Navigate to the workspace and select a non-default block.
     await tabNavigateToWorkspace(this.browser);
 
@@ -214,7 +214,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.strictEqual(blockId, 'p5_draw_1');
   });
 
-  test.skip('Clicking outside Blockly with focused toolbox closes the flyout', async function () {
+  test('Clicking outside Blockly with focused toolbox closes the flyout', async function () {
     // Two tabs should navigate to the toolbox. One click to unfocus.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -227,7 +227,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test.skip('Clicking outside Blockly with focused flyout closes the flyout', async function () {
+  test('Clicking outside Blockly with focused flyout closes the flyout', async function () {
     // Two tabs should navigate to the toolbox. One key to select the flyout.
     await tabNavigateForward(this.browser);
     await tabNavigateForward(this.browser);
@@ -242,7 +242,7 @@ suite.only('Toolbox and flyout test', function () {
     chai.assert.isFalse(flyoutIsOpen);
   });
 
-  test.skip('Clicking on toolbox category focuses it and opens flyout', async function () {
+  test('Clicking on toolbox category focuses it and opens flyout', async function () {
     const elemId = await findToolboxCategoryIdByName(this.browser, 'Loops');
     const elem = this.browser.$(`#${elemId}`);
     await elem.click();
@@ -311,7 +311,7 @@ suite.only('Toolbox and flyout test', function () {
       await this.browser.getAlertText();
     });
 
-    test.skip('callbackKey is activated with enter', async function () {
+    test('callbackKey is activated with enter', async function () {
       setSynchronizeCoreBlocklyRendering(false);
       await tabNavigateToToolbox(this.browser);
       await idle(this.browser);

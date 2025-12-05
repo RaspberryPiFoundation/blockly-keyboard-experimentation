@@ -20,7 +20,7 @@ import {
   idle,
 } from './test_setup.js';
 
-suite.only('Move start tests', function () {
+suite('Move start tests', function () {
   // Increase timeout to 10s for this longer test (but disable
   // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
   this.timeout(PAUSE_TIME ? 0 : 10000);
@@ -46,7 +46,7 @@ suite.only('Move start tests', function () {
   //
   // Also tests initating a move using the shortcut key.
   test('Start moving statement blocks', async function () {
-    for (let i = 1; i < 2; i++) {
+    for (let i = 1; i < 7; i++) {
       // Navigate to statement_<i>.
       await focusOnBlock(this.browser, `statement_${i}`);
 
@@ -110,7 +110,7 @@ suite.only('Move start tests', function () {
   //
   // Also tests initiating a move via the context menu.
   test('Start moving value blocks', async function () {
-    for (let i = 1; i < 2; i++) {
+    for (let i = 1; i < 7; i++) {
       // Navigate to statement_<i>.
       await focusOnBlock(this.browser, `value_${i}`);
 
