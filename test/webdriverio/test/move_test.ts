@@ -186,7 +186,7 @@ suite.only('Move start tests', function () {
   });
 });
 
-suite.only('Statement move tests', function () {
+suite('Statement move tests', function () {
   // Increase timeout to 10s for this longer test (but disable
   // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
   this.timeout(PAUSE_TIME ? 0 : 10000);
@@ -371,7 +371,7 @@ suite.only('Statement move tests', function () {
   });
 });
 
-suite.only(`Value expression move tests`, function () {
+suite(`Value expression move tests`, function () {
   // Increase timeout to 10s for this longer test (but disable
   // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
   this.timeout(PAUSE_TIME ? 0 : 10000);
