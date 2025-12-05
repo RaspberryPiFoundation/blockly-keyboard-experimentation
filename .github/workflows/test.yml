@@ -68,11 +68,11 @@ jobs:
       - name: Run tests (up to 50 times)
         run: |
           cd main
-          #for i in $(seq 1 50);
-          #do
+          for i in $(seq 1 50);
+          do
             echo "Attempt $i"
             npm run wdio:run:ci
-          #done
+          done
 
       - name: Upload test failure screenshots
         if: always()
