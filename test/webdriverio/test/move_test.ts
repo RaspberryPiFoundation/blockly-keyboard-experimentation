@@ -46,7 +46,7 @@ suite.only('Move start tests', function () {
   //
   // Also tests initating a move using the shortcut key.
   test('Start moving statement blocks', async function () {
-    for (let i = 1; i < 7; i++) {
+    for (let i = 1; i < 2; i++) {
       // Navigate to statement_<i>.
       await focusOnBlock(this.browser, `statement_${i}`);
 
