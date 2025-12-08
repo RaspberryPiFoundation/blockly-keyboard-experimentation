@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   webdriverio_tests_tip_of_tree_v12:
-    name: WebdriverIO tests (against tip-of-tree core develop)
+    name: WebdriverIO tests (against tip-of-tree core main)
     timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
@@ -50,7 +50,7 @@ jobs:
           npm install
           cd ..
 
-      - name: Link latest Blockly develop
+      - name: Link latest Blockly main
         run: |
           cd core-blockly
           npm run package
