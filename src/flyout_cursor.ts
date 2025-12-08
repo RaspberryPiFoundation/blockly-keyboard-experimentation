@@ -25,6 +25,7 @@ export class FlyoutCursor extends Blockly.LineCursor {
    */
   constructor(private readonly flyout: Blockly.IFlyout) {
     super(flyout.getWorkspace());
+    this.setNavigationLoops(false);
   }
 
   /**

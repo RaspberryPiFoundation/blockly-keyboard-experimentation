@@ -94,6 +94,8 @@ export class KeyboardNavigation {
     workspace.getSvgGroup().appendChild(this.workspaceFocusRing);
     this.resizeWorkspaceRings();
 
+    workspace.getCursor().setNavigationLoops(false);
+
     registerHtmlToast();
   }
 
@@ -307,7 +309,7 @@ export class KeyboardNavigation {
     stroke: var(--blockly-active-node-color);
     stroke-width: var(--blockly-selection-width);
   }
-  
+
   /* The workspace itself is the active node. */
   .blocklyKeyboardNavigation
     .blocklyBubble.blocklyActiveFocus
