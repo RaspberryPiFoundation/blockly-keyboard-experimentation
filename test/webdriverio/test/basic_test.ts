@@ -49,11 +49,11 @@ suite('Keyboard navigation on Blocks', function () {
     await tabNavigateToWorkspace(this.browser);
     await this.browser.pause(PAUSE_TIME);
 
-    await keyDown(this.browser, 22);
+    await keyDown(this.browser, 13);
 
     chai
       .expect(await getCurrentFocusedBlockId(this.browser))
-      .equal('controls_if_2');
+      .equal('controls_repeat_ext_1');
   });
 
   test('Down from statement block selects next block across stacks', async function () {
