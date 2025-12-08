@@ -44,7 +44,7 @@ let driver: webdriverio.Browser | null = null;
  */
 export const PAUSE_TIME = 0;
 
-var synchronizeCoreBlocklyRendering: boolean = true;
+let synchronizeCoreBlocklyRendering = true;
 
 /**
  * Start up WebdriverIO and load the test page. This should only be
@@ -140,10 +140,19 @@ export async function testSetup(
   return driver;
 }
 
+/**
+ * Checks whether the current test has finished in a 'failing state' and, if it
+ * did, save a screenshot to the 'failures' directory with a name corresponding
+ * to the current test's title.
+ *
+ * @param browser The active WebdriverIO Browser object.
+ * @param testTitle The current running test's title.
+ * @param testState The current running test's completion state, if known.
+ */
 export async function checkForFailures(
   browser: WebdriverIO.Browser,
   testTitle: string,
-  testState: string | undefined
+  testState: string | undefined,
 ) {
   if (testState === 'failed') {
     await browser.saveScreenshot(`failures/${testTitle}.png`);
@@ -213,7 +222,7 @@ export async function getSelectedBlockId(browser: WebdriverIO.Browser) {
 }
 
 /**
- * Idles the browser for PAUSE_TIME, also possibly synchronizing rendering in
+ * Pauses the browser for PAUSE_TIME, also possibly synchronizing rendering in
  * core Blockly.
  *
  * This generally should always be preferred over calling browser.pause()
@@ -224,7 +233,7 @@ export async function getSelectedBlockId(browser: WebdriverIO.Browser) {
  *
  * @param browser The active WebdriverIO Browser object.
  */
-export async function idle(browser: WebdriverIO.Browser, synchronizeRendering: boolean = true) {
+export async function pause(browser: WebdriverIO.Browser) {
   if (synchronizeCoreBlocklyRendering) {
     // First, attempt to synchronize on rendering to ensure that Blockly is
     // fully rendered before pausing for browser execution. This works around
@@ -248,9 +257,9 @@ export async function idle(browser: WebdriverIO.Browser, synchronizeRendering: b
 
 /**
  * Configures whether to synchronize core Blockly's rendering system when trying
- * to idle tests to wait for operations to complete.
+ * to pause tests to wait for operations to complete.
  *
- * This is enabled by default and changes the behavior of idle() which is used
+ * This is enabled by default and changes the behavior of pause() which is used
  * both directly in tests and indirectly via the many test helpers in this file.
  *
  * Synchronization is useful because it ensures Blockly is fully rendered and
@@ -263,10 +272,11 @@ export async function idle(browser: WebdriverIO.Browser, synchronizeRendering: b
  * browser.execute() calls to fail the test (and rendering synchronization
  * relies on this WebdriverIO mechanism).
  *
- * @param enableSynchronization
+ * @param syncRendering Whether to synchronize Blockly rendering when pausing
+ *     test execution using pause().
  */
-export async function setSynchronizeCoreBlocklyRendering(enableSynchronization: boolean) {
-  synchronizeCoreBlocklyRendering = enableSynchronization;
+export function setSynchronizeCoreBlocklyRendering(syncRendering: boolean) {
+  synchronizeCoreBlocklyRendering = syncRendering;
 }
 
 /**
@@ -279,7 +289,7 @@ export async function focusWorkspace(browser: WebdriverIO.Browser) {
     '#blocklyDiv > div > svg.blocklySvg > g',
   );
   await workspaceElement.click({x: 100});
-  await idle(browser);
+  await pause(browser);
 }
 
 /**
@@ -368,7 +378,7 @@ export async function focusOnBlock(
     if (!block) throw new Error(`No block found with ID: ${blockId}.`);
     Blockly.getFocusManager().focusNode(block);
   }, blockId);
-  await idle(browser);
+  await pause(browser);
 }
 
 /**
@@ -391,7 +401,7 @@ export async function focusOnWorkspaceComment(
     }
     Blockly.getFocusManager().focusNode(comment);
   }, commentId);
-  await idle(browser);
+  await pause(browser);
 }
 
 /**
@@ -423,7 +433,7 @@ export async function focusOnBlockField(
     blockId,
     fieldName,
   );
-  await idle(browser);
+  await pause(browser);
 }
 
 /**
@@ -556,7 +566,7 @@ export async function tabNavigateToWorkspace(
   // there's no straightforward way to do that; see
   // https://stackoverflow.com/q/51518855/4969945
   await browser.execute(() => document.getElementById('focusableDiv')?.focus());
-  await idle(browser);
+  await pause(browser);
   // Navigate to workspace.
   if (hasToolbox) await tabNavigateForward(browser);
   if (hasFlyout) await tabNavigateForward(browser);
@@ -653,11 +663,11 @@ export async function sendKeyAndWait(
     // Send all keys in one call if no pauses needed.
     keys = Array(times).fill(keys).flat();
     await browser.keys(keys);
-    await idle(browser);
+    await pause(browser);
   } else {
     for (let i = 0; i < times; i++) {
       await browser.keys(keys);
-      await idle(browser);
+      await pause(browser);
     }
   }
 }
@@ -803,13 +813,13 @@ export async function clickBlock(
     blockId,
     findableId,
   );
-  await idle(browser);
+  await pause(browser);
 
   // In the test context, get the WebdriverIO Element that we've identified.
   const elem = await browser.$(`#${findableId}`);
 
   await elem.click(clickOptions);
-  await idle(browser);
+  await pause(browser);
 
   // In the browser context, remove the ID.
   await browser.execute((elemId) => {
@@ -829,5 +839,5 @@ export async function rightClickOnFlyoutBlockType(
 ) {
   const elem = await browser.$(`.blocklyFlyout .${blockType}`);
   await elem.click({button: 'right'});
-  await idle(browser);
+  await pause(browser);
 }

@@ -17,26 +17,21 @@ import {
   testFileLocations,
   testSetup,
   checkForFailures,
-  idle,
+  pause,
 } from './test_setup.js';
 
 suite('Scrolling into view', function () {
   // Disable timeouts when non-zero PAUSE_TIME is used to watch tests run.
   if (PAUSE_TIME) this.timeout(0);
 
-  // Resize browser to provide predictable small viewport size for scrolling.
+  // Resize browser to provide predictable small window size for scrolling.
   //
   // N.B. that this is called only one per suite, not once per test.
   suiteSetup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    // Note that a viewport is used here over adjusting window size to ensure
-    // consistency across platforms and environments.
-    // await this.browser.setViewport({
-      // width: 800, height: 600, devicePixelRatio: 1
-    // });
     this.windowSize = await this.browser.getWindowSize();
     await this.browser.setWindowSize(800, 600);
-    await idle(this.browser);
+    await pause(this.browser);
   });
 
   // Restore original browser window size.
@@ -52,8 +47,12 @@ suite('Scrolling into view', function () {
     await testSetup(testFileLocations.BASE, this.timeout());
   });
 
-  teardown(async function() {
-    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest!.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Insert scrolls new block into view', async function () {
@@ -78,18 +77,14 @@ suite('Scrolling into view', function () {
       );
     });
     // Pause to allow scrolling to stabilize before proceeding.
-    await idle(this.browser);
+    await pause(this.browser);
 
     // Insert and confirm the test block which should be scrolled into view.
     await sendKeyAndWait(this.browser, 't');
     await keyRight(this.browser);
-    await sendKeyAndWait(this.browser, Key.Enter);
-    await keyDown(this.browser);
-    await keyUp(this.browser);
-    await sendKeyAndWait(this.browser, Key.Enter);
 
     // Assert new block has been scrolled into the viewport.
-    await idle(this.browser);
+    await pause(this.browser);
     const inViewport = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(

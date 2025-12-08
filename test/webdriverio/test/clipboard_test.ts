@@ -19,7 +19,7 @@ import {
   getFocusedBlockType,
   sendKeyAndWait,
   checkForFailures,
-  idle,
+  pause,
 } from './test_setup.js';
 import {Key, KeyAction, PointerAction, WheelAction} from 'webdriverio';
 
@@ -30,11 +30,15 @@ suite('Clipboard test', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    await idle(this.browser);
+    await pause(this.browser);
   });
 
-  teardown(async function() {
-    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest!.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Copy and paste while block selected', async function () {
@@ -118,7 +122,7 @@ suite('Clipboard test', function () {
   test('Do not cut block while field editor is open', async function () {
     // Open a field editor
     await focusOnBlockField(this.browser, 'draw_circle_1_color', 'COLOUR');
-    await idle(this.browser);
+    await pause(this.browser);
     await sendKeyAndWait(this.browser, Key.Enter);
 
     // Try to cut block while field editor is open
@@ -172,7 +176,7 @@ async function performActionWhileDraggingBlock(
       .move(blockX, blockY),
     action,
   ]);
-  await idle(browser);
+  await pause(browser);
 }
 
 /**

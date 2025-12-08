@@ -70,8 +70,12 @@ suite('Workspace comment navigation', function () {
     };
   });
 
-  teardown(async function() {
-    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest!.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Navigate forward from block to workspace comment', async function () {

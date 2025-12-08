@@ -17,7 +17,7 @@ import {
   keyDown,
   contextMenuItems,
   checkForFailures,
-  idle,
+  pause,
 } from './test_setup.js';
 
 suite('Move start tests', function () {
@@ -31,11 +31,15 @@ suite('Move start tests', function () {
       testFileLocations.MOVE_START_TEST_BLOCKS,
       this.timeout(),
     );
-    await idle(this.browser);
+    await pause(this.browser);
   });
 
-  teardown(async function() {
-    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest!.title,
+      this.currentTest?.state,
+    );
   });
 
   // When a move of a statement block begins, it is expected that only
@@ -197,11 +201,15 @@ suite('Statement move tests', function () {
       testFileLocations.MOVE_STATEMENT_TEST_BLOCKS,
       this.timeout(),
     );
-    await idle(this.browser);
+    await pause(this.browser);
   });
 
-  teardown(async function() {
-    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest!.title,
+      this.currentTest?.state,
+    );
   });
 
   /** Serialized simple statement block with no statement inputs. */
@@ -484,11 +492,15 @@ suite(`Value expression move tests`, function () {
           ),
           this.timeout(),
         );
-        await idle(this.browser);
+        await pause(this.browser);
       });
 
-      teardown(async function() {
-        await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+      teardown(async function () {
+        await checkForFailures(
+          this.browser,
+          this.currentTest!.title,
+          this.currentTest?.state,
+        );
       });
 
       suite('Constrained moves of a simple reporter block', function () {

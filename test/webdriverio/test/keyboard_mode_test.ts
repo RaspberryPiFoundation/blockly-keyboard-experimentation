@@ -16,7 +16,7 @@ import {
   clickBlock,
   sendKeyAndWait,
   checkForFailures,
-  idle,
+  pause,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -39,7 +39,7 @@ suite(
         this.timeout(),
       );
 
-      await idle(this.browser);
+      await pause(this.browser);
 
       // Reset the keyboard navigation state between tests.
       await this.browser.execute(() => {
@@ -50,12 +50,16 @@ suite(
       await tabNavigateToWorkspace(this.browser);
     });
 
-    teardown(async function() {
-      await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+    teardown(async function () {
+      await checkForFailures(
+        this.browser,
+        this.currentTest!.title,
+        this.currentTest?.state,
+      );
     });
 
     test('T to open toolbox enables keyboard mode', async function () {
-      await idle(this.browser);
+      await pause(this.browser);
       await sendKeyAndWait(this.browser, 't');
 
       chai.assert.isTrue(await isKeyboardNavigating(this.browser));
@@ -63,14 +67,14 @@ suite(
 
     test('M for move mode enables keyboard mode', async function () {
       await focusOnBlock(this.browser, 'controls_if_2');
-      await idle(this.browser);
+      await pause(this.browser);
       await sendKeyAndWait(this.browser, 'm');
 
       chai.assert.isTrue(await isKeyboardNavigating(this.browser));
     });
 
     test('W for workspace cursor enables keyboard mode', async function () {
-      await idle(this.browser);
+      await pause(this.browser);
       await sendKeyAndWait(this.browser, 'w');
 
       chai.assert.isTrue(await isKeyboardNavigating(this.browser));
@@ -78,7 +82,7 @@ suite(
 
     test('X to disconnect enables keyboard mode', async function () {
       await focusOnBlock(this.browser, 'controls_if_2');
-      await idle(this.browser);
+      await pause(this.browser);
       await sendKeyAndWait(this.browser, 'x');
 
       chai.assert.isTrue(await isKeyboardNavigating(this.browser));
@@ -87,7 +91,7 @@ suite(
     test('Copy does not change keyboard mode state', async function () {
       // Make sure we're on a copyable block so that copy occurs
       await focusOnBlock(this.browser, 'controls_if_2');
-      await idle(this.browser);
+      await pause(this.browser);
       await sendKeyAndWait(this.browser, [Key.Ctrl, 'c']);
 
       chai.assert.isFalse(await isKeyboardNavigating(this.browser));
@@ -96,7 +100,7 @@ suite(
         Blockly.keyboardNavigationController.setIsActive(true);
       });
 
-      await idle(this.browser);
+      await pause(this.browser);
       await sendKeyAndWait(this.browser, [Key.Ctrl, 'c']);
 
       chai.assert.isTrue(await isKeyboardNavigating(this.browser));
@@ -105,7 +109,7 @@ suite(
     test('Delete does not change keyboard mode state', async function () {
       // Make sure we're on a deletable block so that delete occurs
       await focusOnBlock(this.browser, 'controls_if_2');
-      await idle(this.browser);
+      await pause(this.browser);
       await sendKeyAndWait(this.browser, Key.Backspace);
 
       chai.assert.isFalse(await isKeyboardNavigating(this.browser));
@@ -116,7 +120,7 @@ suite(
 
       // Focus a different deletable block
       await focusOnBlock(this.browser, 'controls_if_1');
-      await idle(this.browser);
+      await pause(this.browser);
       await sendKeyAndWait(this.browser, Key.Backspace);
 
       chai.assert.isTrue(await isKeyboardNavigating(this.browser));
@@ -127,10 +131,10 @@ suite(
         Blockly.keyboardNavigationController.setIsActive(true);
       });
 
-      await idle(this.browser);
+      await pause(this.browser);
       // Right click a block
       await clickBlock(this.browser, 'controls_if_1', {button: 'right'});
-      await idle(this.browser);
+      await pause(this.browser);
 
       chai.assert.isFalse(await isKeyboardNavigating(this.browser));
     });
@@ -140,7 +144,7 @@ suite(
         Blockly.keyboardNavigationController.setIsActive(true);
       });
 
-      await idle(this.browser);
+      await pause(this.browser);
       // Drag a block
       const element = await getBlockElementById(this.browser, 'controls_if_1');
 
@@ -153,7 +157,7 @@ suite(
         );
       });
       await element.dragAndDrop({x: 10, y: 10});
-      await idle(this.browser);
+      await pause(this.browser);
 
       chai.assert.isFalse(await isKeyboardNavigating(this.browser));
     });

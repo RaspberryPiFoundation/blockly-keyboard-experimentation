@@ -15,7 +15,6 @@ jobs:
   build_tip_of_tree_v12:
     name: Build test (against tip-of-tree core develop)
     runs-on: ubuntu-latest
-    if: false
     steps:
       - name: Checkout experimentation plugin
         uses: actions/checkout@v4
@@ -60,7 +59,8 @@ jobs:
 
   build:
     name: Build test (against pinned v12)
-    if: false
+    # Don't run pinned version checks for PRs.
+    if: ${{ !github.base_ref }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout experimentation plugin
@@ -81,7 +81,6 @@ jobs:
     name: Eslint check
     timeout-minutes: 5
     runs-on: ubuntu-latest
-    if: false
     steps:
       - uses: actions/checkout@v4
 
@@ -100,7 +99,6 @@ jobs:
     name: Prettier check
     timeout-minutes: 5
     runs-on: ubuntu-latest
-    if: false
     steps:
       - uses: actions/checkout@v4
 

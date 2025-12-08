@@ -35,8 +35,12 @@ suite('Block comment navigation', function () {
     });
   });
 
-  teardown(async function() {
-    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest!.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Activating a block comment icon focuses the comment', async function () {

@@ -23,7 +23,7 @@ import {
   keyUp,
   tabNavigateToToolbox,
   checkForFailures,
-  idle,
+  pause,
 } from './test_setup.js';
 
 suite('Insert test', function () {
@@ -33,11 +33,15 @@ suite('Insert test', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    await idle(this.browser);
+    await pause(this.browser);
   });
 
-  teardown(async function() {
-    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest!.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Insert and cancel with block selection', async function () {
@@ -151,11 +155,15 @@ suite('Insert test with more blocks', function () {
       testFileLocations.MORE_BLOCKS,
       this.timeout(),
     );
-    await idle(this.browser);
+    await pause(this.browser);
   });
 
-  teardown(async function() {
-    await checkForFailures(this.browser, this.currentTest!.title, this.currentTest?.state);
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest!.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Does not bump immovable input blocks on insert', async function () {
