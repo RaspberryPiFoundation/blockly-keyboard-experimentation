@@ -69,7 +69,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: test-failure-screenshots
+          name: test-failure-screenshots-${{ matrix.os }}
           path: main/test/webdriverio/test/failures
 
   webdriverio_tests:

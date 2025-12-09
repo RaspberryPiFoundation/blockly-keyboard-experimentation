@@ -4,3 +4,4 @@ build-debug.log
 node_modules/
 build/
 dist/
+test/webdriverio/test/failures/
