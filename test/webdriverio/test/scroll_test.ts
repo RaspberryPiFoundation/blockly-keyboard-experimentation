@@ -59,7 +59,6 @@ suite('Scrolling into view', function () {
     // Increase timeout for this longer test.
     this.timeout(PAUSE_TIME ? 0 : 30000);
 
-    // setPauseTime(0);
     await tabNavigateToWorkspace(this.browser);
 
     // Separate the two top-level blocks by moving p5_draw_1 further down.
@@ -82,6 +81,7 @@ suite('Scrolling into view', function () {
     // Insert and confirm the test block which should be scrolled into view.
     await sendKeyAndWait(this.browser, 't');
     await keyRight(this.browser);
+    await sendKeyAndWait(this.browser, Key.Enter, 2);
 
     // Assert new block has been scrolled into the viewport.
     await pause(this.browser);
