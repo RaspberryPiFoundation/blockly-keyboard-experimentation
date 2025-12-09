@@ -146,15 +146,18 @@ export async function testSetup(
  * to the current test's title.
  *
  * @param browser The active WebdriverIO Browser object.
- * @param testTitle The current running test's title.
+ * @param testTitle The current running test's title, if known.
  * @param testState The current running test's completion state, if known.
  */
 export async function checkForFailures(
   browser: WebdriverIO.Browser,
-  testTitle: string,
+  testTitle: string | undefined,
   testState: string | undefined,
 ) {
   if (testState === 'failed') {
+    if (!testTitle) {
+      throw new Error('Test failed and finished with no test title.');
+    }
     await browser.saveScreenshot(`failures/${testTitle}.png`);
   }
 }

@@ -39,7 +39,7 @@ suite('Insert test', function () {
   teardown(async function () {
     await checkForFailures(
       this.browser,
-      this.currentTest!.title,
+      this.currentTest?.title,
       this.currentTest?.state,
     );
   });
@@ -161,7 +161,7 @@ suite('Insert test with more blocks', function () {
   teardown(async function () {
     await checkForFailures(
       this.browser,
-      this.currentTest!.title,
+      this.currentTest?.title,
       this.currentTest?.state,
     );
   });

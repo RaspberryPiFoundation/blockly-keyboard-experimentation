@@ -8,7 +8,6 @@ import * as chai from 'chai';
 import {
   getCurrentFocusedBlockId,
   getCurrentFocusNodeId,
-  PAUSE_TIME,
   tabNavigateToWorkspace,
   testFileLocations,
   testSetup,
@@ -27,7 +26,7 @@ suite('Stack navigation', function () {
   teardown(async function () {
     await checkForFailures(
       this.browser,
-      this.currentTest!.title,
+      this.currentTest?.title,
       this.currentTest?.state,
     );
   });

@@ -9,7 +9,6 @@ import * as chai from 'chai';
 import {Key} from 'webdriverio';
 import {
   sendKeyAndWait,
-  keyUp,
   keyDown,
   keyRight,
   PAUSE_TIME,
@@ -50,7 +49,7 @@ suite('Scrolling into view', function () {
   teardown(async function () {
     await checkForFailures(
       this.browser,
-      this.currentTest!.title,
+      this.currentTest?.title,
       this.currentTest?.state,
     );
   });

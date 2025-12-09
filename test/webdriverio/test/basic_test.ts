@@ -42,7 +42,7 @@ suite('Keyboard navigation on Blocks', function () {
   teardown(async function () {
     await checkForFailures(
       this.browser,
-      this.currentTest!.title,
+      this.currentTest?.title,
       this.currentTest?.state,
     );
   });
@@ -248,7 +248,7 @@ suite('Keyboard navigation on Fields', function () {
   teardown(async function () {
     await checkForFailures(
       this.browser,
-      this.currentTest!.title,
+      this.currentTest?.title,
       this.currentTest?.state,
     );
   });

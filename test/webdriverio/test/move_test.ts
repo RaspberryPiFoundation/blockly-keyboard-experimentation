@@ -37,7 +37,7 @@ suite('Move start tests', function () {
   teardown(async function () {
     await checkForFailures(
       this.browser,
-      this.currentTest!.title,
+      this.currentTest?.title,
       this.currentTest?.state,
     );
   });
@@ -207,7 +207,7 @@ suite('Statement move tests', function () {
   teardown(async function () {
     await checkForFailures(
       this.browser,
-      this.currentTest!.title,
+      this.currentTest?.title,
       this.currentTest?.state,
     );
   });
@@ -498,7 +498,7 @@ suite(`Value expression move tests`, function () {
       teardown(async function () {
         await checkForFailures(
           this.browser,
-          this.currentTest!.title,
+          this.currentTest?.title,
           this.currentTest?.state,
         );
       });
