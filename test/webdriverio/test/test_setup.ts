@@ -128,7 +128,7 @@ export async function testSetup(
     driver = await driverSetup(wdioWaitTimeoutMs);
   } else if (process.env.CI) {
     // If running in CI force a session reload to ensure no browser state can
-    // leak across test suites (since this can sometimes cause complex combined
+    // leak across tests (since this can sometimes cause complex combined
     // failures in CI).
     await driver.reloadSession();
   }

@@ -302,6 +302,8 @@ suite('Toolbox and flyout test', function () {
       }
     });
     test('callbackkey is activated with enter', async function () {
+      // Rendering synchronization must be disabled since this test opens an
+      // alert dialog. See the function's documentation for more specifics.
       setSynchronizeCoreBlocklyRendering(false);
       await tabNavigateToToolbox(this.browser);
       await pause(this.browser);
@@ -316,6 +318,8 @@ suite('Toolbox and flyout test', function () {
     });
 
     test('callbackKey is activated with enter', async function () {
+      // Rendering synchronization must be disabled since this test opens an
+      // alert dialog. See the function's documentation for more specifics.
       setSynchronizeCoreBlocklyRendering(false);
       await tabNavigateToToolbox(this.browser);
       await pause(this.browser);
