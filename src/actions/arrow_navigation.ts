@@ -66,7 +66,10 @@ export class ArrowNavigation {
             if (
               !this.navigation.defaultWorkspaceCursorPositionIfNeeded(workspace)
             ) {
-              workspace.getCursor().in();
+              const newNode = workspace.getCursor().in();
+              if (!newNode) {
+                workspace.getAudioManager().beep(260);
+              }
             }
             isHandled = true;
           }
@@ -99,7 +102,10 @@ export class ArrowNavigation {
             if (
               !this.navigation.defaultWorkspaceCursorPositionIfNeeded(workspace)
             ) {
-              workspace.getCursor().out();
+              const newNode = workspace.getCursor().out();
+              if (!newNode) {
+                workspace.getAudioManager().beep(260);
+              }
             }
             isHandled = true;
           }
@@ -165,7 +171,10 @@ export class ArrowNavigation {
                     workspace,
                   )
                 ) {
-                  workspace.getCursor().next();
+                  const newNode = workspace.getCursor().next();
+                  if (!newNode) {
+                    workspace.getAudioManager().beep(260);
+                  }
                 }
                 isHandled = true;
               }
@@ -178,7 +187,10 @@ export class ArrowNavigation {
                     workspace.targetWorkspace,
                   )
                 ) {
-                  workspace.getCursor().next();
+                  const newNode = workspace.getCursor().next();
+                  if (!newNode) {
+                    workspace.getAudioManager().beep(260);
+                  }
                 }
                 isHandled = true;
               }
@@ -228,7 +240,10 @@ export class ArrowNavigation {
                     'last',
                   )
                 ) {
-                  workspace.getCursor().prev();
+                  const newNode = workspace.getCursor().prev();
+                  if (!newNode) {
+                    workspace.getAudioManager().beep(260);
+                  }
                 }
                 isHandled = true;
               }
@@ -242,7 +257,10 @@ export class ArrowNavigation {
                     'last',
                   )
                 ) {
-                  workspace.getCursor().prev();
+                  const newNode = workspace.getCursor().prev();
+                  if (!newNode) {
+                    workspace.getAudioManager().beep(260);
+                  }
                 }
                 isHandled = true;
               }

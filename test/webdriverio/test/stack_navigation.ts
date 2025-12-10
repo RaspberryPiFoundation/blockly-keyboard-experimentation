@@ -8,6 +8,7 @@ import * as chai from 'chai';
 import {
   getCurrentFocusedBlockId,
   getCurrentFocusNodeId,
+  focusOnWorkspaceComment,
   PAUSE_TIME,
   tabNavigateToWorkspace,
   testFileLocations,
@@ -39,10 +40,10 @@ suite('Stack navigation', function () {
       await getCurrentFocusNodeId(this.browser),
     );
     await sendKeyAndWait(this.browser, 'n');
-    // Looped around.
+    // Does not loop around.
     chai.assert.equal(
-      'p5_setup_1',
-      await getCurrentFocusedBlockId(this.browser),
+      'workspace_comment_1',
+      await getCurrentFocusNodeId(this.browser),
     );
   });
 
@@ -53,11 +54,14 @@ suite('Stack navigation', function () {
       await getCurrentFocusedBlockId(this.browser),
     );
     await sendKeyAndWait(this.browser, 'b');
-    // Looped to bottom.
+    // Does not loop to bottom.
     chai.assert.equal(
-      'workspace_comment_1',
-      await getCurrentFocusNodeId(this.browser),
+      'p5_setup_1',
+      await getCurrentFocusedBlockId(this.browser),
     );
+
+    await focusOnWorkspaceComment(this.browser, 'workspace_comment_1');
+
     await sendKeyAndWait(this.browser, 'b');
     chai.assert.isTrue(
       (await getCurrentFocusNodeId(this.browser))?.startsWith(

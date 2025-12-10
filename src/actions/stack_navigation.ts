@@ -62,7 +62,10 @@ export class StackNavigationAction {
     }
 
     let nextRoot = navigateStacks(curNodeRoot, delta);
-    if (!nextRoot) return false;
+    if (!nextRoot) {
+      workspace.getAudioManager().beep(260);
+      return false;
+    }
     if (nextRoot instanceof BlockSvg) {
       nextRoot = nextRoot.getRootBlock();
     }
