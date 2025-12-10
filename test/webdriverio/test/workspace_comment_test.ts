@@ -20,6 +20,7 @@ import {
   keyUp,
   contextMenuItems,
   PAUSE_TIME,
+  checkForFailures,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -67,6 +68,14 @@ suite('Workspace comment navigation', function () {
         return [bounds.left, bounds.top];
       }, commentId);
     };
+  });
+
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest?.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Navigate forward from block to workspace comment', async function () {
@@ -151,7 +160,7 @@ suite('Workspace comment navigation', function () {
       return Blockly.getMainWorkspace()
         .getCommentById(commentId)
         ?.isCollapsed();
-    }, this.commentId1);
+    }, this.commentId1 as string);
     chai.assert.isTrue(collapsed);
   });
 
@@ -172,7 +181,7 @@ suite('Workspace comment navigation', function () {
 
     const commentText = await this.browser.execute((commentId) => {
       return Blockly.getMainWorkspace().getCommentById(commentId)?.getText();
-    }, this.commentId1);
+    }, this.commentId1 as string);
     chai.assert.equal(commentText, 'Comment oneHello world');
   });
 

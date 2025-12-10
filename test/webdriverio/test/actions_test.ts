@@ -20,6 +20,8 @@ import {
   sendKeyAndWait,
   keyRight,
   contextMenuItems,
+  checkForFailures,
+  pause,
 } from './test_setup.js';
 
 const isDarwin = process.platform === 'darwin';
@@ -96,13 +98,21 @@ suite('Menus test', function () {
       testFileLocations.MORE_BLOCKS,
       this.timeout(),
     );
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
+  });
+
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest?.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Menu action via keyboard on block opens menu', async function () {
     // Navigate to draw_circle_1.
     await focusOnBlock(this.browser, 'draw_circle_1');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
     await sendKeyAndWait(this.browser, [Key.Ctrl, Key.Return]);
 
     chai.assert.deepEqual(
@@ -126,7 +136,7 @@ suite('Menus test', function () {
     await focusOnBlock(this.browser, 'text_print_1');
     await this.browser.keys(Key.ArrowRight);
     await this.browser.keys([Key.Ctrl, Key.Return]);
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai.assert.deepEqual(
       await contextMenuItems(this.browser),
@@ -154,9 +164,9 @@ suite('Menus test', function () {
     await moveToToolboxCategory(this.browser, 'Math');
     // Move to flyout.
     await keyRight(this.browser);
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
     await rightClickOnFlyoutBlockType(this.browser, 'math_number');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai.assert.deepEqual(
       await contextMenuItems(this.browser),
@@ -192,11 +202,11 @@ suite('Menus test', function () {
   test('Escape key dismisses menu', async function () {
     await tabNavigateToWorkspace(this.browser);
     await focusOnBlock(this.browser, 'draw_circle_1');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
     await this.browser.keys([Key.Ctrl, Key.Return]);
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
     await this.browser.keys(Key.Escape);
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai.assert.isTrue(
       await contextMenuExists(this.browser, 'Duplicate', /* reverse= */ true),
@@ -207,9 +217,9 @@ suite('Menus test', function () {
   test('Clicking workspace dismisses menu', async function () {
     await tabNavigateToWorkspace(this.browser);
     await clickBlock(this.browser, 'draw_circle_1', {button: 'right'});
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
     await focusWorkspace(this.browser);
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai.assert.isTrue(
       await contextMenuExists(this.browser, 'Duplicate', /* reverse= */ true),

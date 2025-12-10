@@ -18,6 +18,8 @@ import {
   sendKeyAndWait,
   keyRight,
   focusOnBlockField,
+  checkForFailures,
+  pause,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -31,12 +33,20 @@ suite('Deleting Blocks', function () {
       testFileLocations.NAVIGATION_TEST_BLOCKS,
       this.timeout(),
     );
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
+  });
+
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest?.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Deleting block selects parent block', async function () {
     await focusOnBlock(this.browser, 'controls_if_2');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai
       .expect(await blockIsPresent(this.browser, 'controls_if_2'))
@@ -55,7 +65,7 @@ suite('Deleting Blocks', function () {
 
   test('Cutting block selects parent block', async function () {
     await focusOnBlock(this.browser, 'controls_if_2');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai
       .expect(await blockIsPresent(this.browser, 'controls_if_2'))
@@ -74,7 +84,7 @@ suite('Deleting Blocks', function () {
 
   test('Deleting block also deletes children and inputs', async function () {
     await focusOnBlock(this.browser, 'controls_if_2');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai
       .expect(await blockIsPresent(this.browser, 'logic_boolean_1'))
@@ -93,7 +103,7 @@ suite('Deleting Blocks', function () {
 
   test('Cutting block also removes children and inputs', async function () {
     await focusOnBlock(this.browser, 'controls_if_2');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai
       .expect(await blockIsPresent(this.browser, 'logic_boolean_1'))
@@ -112,7 +122,7 @@ suite('Deleting Blocks', function () {
 
   test('Deleting inline input selects parent block', async function () {
     await focusOnBlock(this.browser, 'logic_boolean_1');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai
       .expect(await blockIsPresent(this.browser, 'logic_boolean_1'))
@@ -131,7 +141,7 @@ suite('Deleting Blocks', function () {
 
   test('Cutting inline input selects parent block', async function () {
     await focusOnBlock(this.browser, 'logic_boolean_1');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     chai
       .expect(await blockIsPresent(this.browser, 'logic_boolean_1'))
@@ -155,11 +165,11 @@ suite('Deleting Blocks', function () {
     // We want deleting a block to focus the workspace, whatever that
     // means at the time.
     await tabNavigateToWorkspace(this.browser);
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     // The test workspace doesn't already contain a stranded block, so add one.
     await moveToToolboxCategory(this.browser, 'Math');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
     // Move to flyout.
     await keyRight(this.browser);
     // Select number block.
@@ -179,11 +189,11 @@ suite('Deleting Blocks', function () {
 
   test('Cutting stranded block selects top block', async function () {
     await tabNavigateToWorkspace(this.browser);
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
 
     // The test workspace doesn't already contain a stranded block, so add one.
     await moveToToolboxCategory(this.browser, 'Math');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
     // Move to flyout.
     await keyRight(this.browser);
     // Select number block.
@@ -204,7 +214,7 @@ suite('Deleting Blocks', function () {
   test('Do not delete block while field editor is open', async function () {
     // Open a field editor
     await focusOnBlockField(this.browser, 'colour_picker_1', 'COLOUR');
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
     await sendKeyAndWait(this.browser, Key.Enter);
 
     // Try to delete block while field editor is open

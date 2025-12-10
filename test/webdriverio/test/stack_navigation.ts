@@ -8,18 +8,27 @@ import * as chai from 'chai';
 import {
   getCurrentFocusedBlockId,
   getCurrentFocusNodeId,
-  PAUSE_TIME,
   tabNavigateToWorkspace,
   testFileLocations,
   testSetup,
   sendKeyAndWait,
+  checkForFailures,
+  pause,
 } from './test_setup.js';
 
 suite('Stack navigation', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     this.browser = await testSetup(testFileLocations.COMMENTS, this.timeout());
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
+  });
+
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest?.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Next', async function () {

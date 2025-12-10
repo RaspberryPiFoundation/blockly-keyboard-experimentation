@@ -14,6 +14,7 @@ import {
   testFileLocations,
   keyRight,
   PAUSE_TIME,
+  checkForFailures,
 } from './test_setup.js';
 import {Key} from 'webdriverio';
 
@@ -32,6 +33,14 @@ suite('Block comment navigation', function () {
         .getBlockById('p5_canvas_1')
         ?.setCommentText('test comment');
     });
+  });
+
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest?.title,
+      this.currentTest?.state,
+    );
   });
 
   test('Activating a block comment icon focuses the comment', async function () {

@@ -16,12 +16,14 @@ import {
   sendKeyAndWait,
   keyDown,
   contextMenuItems,
+  checkForFailures,
+  pause,
 } from './test_setup.js';
 
 suite('Move start tests', function () {
-  // Increase timeout to 10s for this longer test (but disable
-  // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
-  this.timeout(PAUSE_TIME ? 0 : 10000);
+  // Increase timeout for this longer test (but disable timeouts if when
+  // non-zero PAUSE_TIME is used to watch tests) run.
+  this.timeout(PAUSE_TIME ? 0 : 30000);
 
   // Clear the workspace and load start blocks.
   setup(async function () {
@@ -29,7 +31,15 @@ suite('Move start tests', function () {
       testFileLocations.MOVE_START_TEST_BLOCKS,
       this.timeout(),
     );
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
+  });
+
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest?.title,
+      this.currentTest?.state,
+    );
   });
 
   // When a move of a statement block begins, it is expected that only
@@ -181,9 +191,9 @@ suite('Move start tests', function () {
 });
 
 suite('Statement move tests', function () {
-  // Increase timeout to 10s for this longer test (but disable
-  // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
-  this.timeout(PAUSE_TIME ? 0 : 10000);
+  // Increase timeout for this longer test (but disable timeouts if when
+  // non-zero PAUSE_TIME is used to watch tests) run.
+  this.timeout(PAUSE_TIME ? 0 : 30000);
 
   // Clear the workspace and load start blocks.
   setup(async function () {
@@ -191,7 +201,15 @@ suite('Statement move tests', function () {
       testFileLocations.MOVE_STATEMENT_TEST_BLOCKS,
       this.timeout(),
     );
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
+  });
+
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest?.title,
+      this.currentTest?.state,
+    );
   });
 
   /** Serialized simple statement block with no statement inputs. */
@@ -362,9 +380,9 @@ suite('Statement move tests', function () {
 });
 
 suite(`Value expression move tests`, function () {
-  // Increase timeout to 10s for this longer test (but disable
-  // timeouts if when non-zero PAUSE_TIME is used to watch tests) run.
-  this.timeout(PAUSE_TIME ? 0 : 10000);
+  // Increase timeout for this longer test (but disable timeouts if when
+  // non-zero PAUSE_TIME is used to watch tests) run.
+  this.timeout(PAUSE_TIME ? 0 : 30000);
 
   /** Serialized simple reporter value block with no inputs. */
   const VALUE_SIMPLE = {
@@ -474,7 +492,15 @@ suite(`Value expression move tests`, function () {
           ),
           this.timeout(),
         );
-        await this.browser.pause(PAUSE_TIME);
+        await pause(this.browser);
+      });
+
+      teardown(async function () {
+        await checkForFailures(
+          this.browser,
+          this.currentTest?.title,
+          this.currentTest?.state,
+        );
       });
 
       suite('Constrained moves of a simple reporter block', function () {

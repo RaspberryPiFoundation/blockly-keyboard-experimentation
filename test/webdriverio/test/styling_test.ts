@@ -14,6 +14,8 @@ import {
   tabNavigateToWorkspace,
   testFileLocations,
   testSetup,
+  checkForFailures,
+  pause,
 } from './test_setup.js';
 import * as chai from 'chai';
 
@@ -24,7 +26,15 @@ suite('Styling test', function () {
   // Clear the workspace and load start blocks.
   setup(async function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
+  });
+
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest?.title,
+      this.currentTest?.state,
+    );
   });
 
   async function strokeColorEquals(

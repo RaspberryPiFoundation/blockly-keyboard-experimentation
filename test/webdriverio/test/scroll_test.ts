@@ -15,6 +15,8 @@ import {
   tabNavigateToWorkspace,
   testFileLocations,
   testSetup,
+  checkForFailures,
+  pause,
 } from './test_setup.js';
 
 suite('Scrolling into view', function () {
@@ -28,7 +30,7 @@ suite('Scrolling into view', function () {
     this.browser = await testSetup(testFileLocations.BASE, this.timeout());
     this.windowSize = await this.browser.getWindowSize();
     await this.browser.setWindowSize(800, 600);
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
   });
 
   // Restore original browser window size.
@@ -44,9 +46,17 @@ suite('Scrolling into view', function () {
     await testSetup(testFileLocations.BASE, this.timeout());
   });
 
+  teardown(async function () {
+    await checkForFailures(
+      this.browser,
+      this.currentTest?.title,
+      this.currentTest?.state,
+    );
+  });
+
   test('Insert scrolls new block into view', async function () {
-    // Increase timeout to 10s for this longer test.
-    this.timeout(PAUSE_TIME ? 0 : 10000);
+    // Increase timeout for this longer test.
+    this.timeout(PAUSE_TIME ? 0 : 30000);
 
     await tabNavigateToWorkspace(this.browser);
 
@@ -64,6 +74,8 @@ suite('Scrolling into view', function () {
         ).getBoundingRectangleWithoutChildren(),
       );
     });
+    // Pause to allow scrolling to stabilize before proceeding.
+    await pause(this.browser);
 
     // Insert and confirm the test block which should be scrolled into view.
     await sendKeyAndWait(this.browser, 't');
@@ -71,7 +83,7 @@ suite('Scrolling into view', function () {
     await sendKeyAndWait(this.browser, Key.Enter, 2);
 
     // Assert new block has been scrolled into the viewport.
-    await this.browser.pause(PAUSE_TIME);
+    await pause(this.browser);
     const inViewport = await this.browser.execute(() => {
       const workspace = Blockly.getMainWorkspace() as Blockly.WorkspaceSvg;
       const block = workspace.getBlocksByType(

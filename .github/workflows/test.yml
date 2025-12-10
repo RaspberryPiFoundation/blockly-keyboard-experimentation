@@ -65,6 +65,13 @@ jobs:
           cd main
           npm run test:ci
 
+      - name: Upload test failure screenshots
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: test-failure-screenshots-${{ matrix.os }}
+          path: main/test/webdriverio/test/failures
+
   webdriverio_tests:
     name: WebdriverIO tests (against pinned v12)
     # Don't run pinned version checks for PRs.
