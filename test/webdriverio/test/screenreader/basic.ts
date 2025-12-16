@@ -6,7 +6,7 @@
 
 import * as chai from 'chai';
 import * as Blockly from 'blockly/core';
-import {PAUSE_TIME, testFileLocations, testSetup, focusOnBlock, focusWorkspace, moveToToolboxCategory} from '../test_setup.js';
+import {PAUSE_TIME, testFileLocations, testSetup, focusWorkspace} from '../test_setup.js';
 import { voiceOver } from "@guidepup/guidepup";
 
 suite('Screenreader', function () {
