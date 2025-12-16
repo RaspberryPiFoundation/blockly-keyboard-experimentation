@@ -10,15 +10,17 @@
  * a new one for every suite.
  */
 import {RootHookObject} from 'mocha';
-import { voiceOver } from "@guidepup/guidepup";
-import { exec } from 'child_process';
+import {voiceOver} from '@guidepup/guidepup';
+import {exec} from 'child_process';
 
 export const mochaHooks: RootHookObject = {
   async beforeAll(this: Mocha.Context) {
     return voiceOver.start();
   },
   async beforeEach() {
-    return exec('osascript -e \'tell application \"System Events\" to set frontmost of the first process whose name is \"Google Chrome\" to true\'');
+    return exec(
+      'osascript -e \'tell application "System Events" to set frontmost of the first process whose name is "Google Chrome" to true\'',
+    );
   },
   async afterAll() {
     return voiceOver.stop();
