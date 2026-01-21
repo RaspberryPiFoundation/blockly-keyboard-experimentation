@@ -52,11 +52,11 @@ jobs:
 
       - name: Link latest Blockly main
         run: |
-          cd core-blockly
+          cd core-blockly/packages/blockly
           npm run package
           cd dist
           npm link
-          cd ../../main
+          cd ../../../../main
           npm link blockly
           cd ..
 
