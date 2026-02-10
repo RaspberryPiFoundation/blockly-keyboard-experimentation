@@ -8,6 +8,7 @@ import * as Blockly from 'blockly/core';
 import {NavigationController} from './navigation_controller';
 import {enableBlocksOnDrag} from './disabled_blocks';
 import {registerHtmlToast} from './html_toast';
+import {registerFlyoutCursor} from './flyout_cursor';
 
 /** Plugin for keyboard navigation. */
 export class KeyboardNavigation {
@@ -137,6 +138,14 @@ export class KeyboardNavigation {
    */
   toggleShortcutDialog(): void {
     this.navigationController.shortcutDialog.toggle(this.workspace);
+  }
+
+  /**
+   * Registers a specific flyout cursor that allows navigation to
+   * flyout labels and buttons.
+   */
+  static registerFlyoutCursor() {
+    registerFlyoutCursor();
   }
 
   /**
