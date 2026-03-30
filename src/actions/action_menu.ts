@@ -65,8 +65,9 @@ export class ActionMenu {
         createSerializedKey(KeyCodes.ENTER, [KeyCodes.ALT]),
         createSerializedKey(KeyCodes.ENTER, [KeyCodes.META]),
       ],
+      allowCollision: true,
     };
-    ShortcutRegistry.registry.register(menuShortcut);
+    ShortcutRegistry.registry.register(menuShortcut, true);
   }
 
   /**
