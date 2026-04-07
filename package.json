@@ -1,6 +1,6 @@
 {
   "name": "@blockly/keyboard-navigation",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "A plugin for keyboard navigation.",
   "scripts": {
     "audit:fix": "blockly-scripts auditFix",
