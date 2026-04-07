@@ -12,7 +12,6 @@
     "format:check": "prettier --check .",
     "ghpages": "node scripts/deploy.js",
     "predeploy": "blockly-scripts predeploy",
-    "prepublishOnly": "npm login --registry https://wombat-dressing-room.appspot.com",
     "start": "blockly-scripts start",
     "test": "npm run test:mocha && npm run test:wdio",
     "test:ci": "npm run test:mocha && npm run test:wdio:ci",
