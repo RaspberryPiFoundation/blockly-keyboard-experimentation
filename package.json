@@ -34,13 +34,13 @@
     "blockly-plugin",
     "keyboard-experiment"
   ],
-  "homepage": "https://github.com/google/blockly-keyboard-experimentation#readme",
+  "homepage": "https://github.com/RaspberryPiFoundation/blockly-keyboard-experimentation#readme",
   "bugs": {
-    "url": "https://github.com/google/blockly-keyboard-experimentation/issues"
+    "url": "https://github.com/RaspberryPiFoundation/blockly-keyboard-experimentation/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/google/blockly-keyboard-experimentation.git"
+    "url": "git+https://github.com/RaspberryPiFoundation/blockly-keyboard-experimentation.git"
   },
   "license": "Apache-2.0",
   "directories": {
@@ -82,10 +82,6 @@
     "blockly": "^12.3.0"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://wombat-dressing-room.appspot.com"
-  },
-  "eslintConfig": {
-    "extends": "@blockly/eslint-config"
+    "access": "public"
   }
 }
